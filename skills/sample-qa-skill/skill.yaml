@@ -1,0 +1,22 @@
+id: sample-qa-check
+name: Sample QA Check
+version: 0.1.0
+scope: public
+inputs:
+  - name: artifact_path
+    type: string
+    required: true
+  - name: task_summary
+    type: string
+    required: true
+outputs:
+  - name: status
+    type: string
+  - name: notes
+    type: string
+safety:
+  read_only: true
+  notes: "Do not modify source data"
+artifacts:
+  - qa_report.md
+entrypoint: SKILL.md

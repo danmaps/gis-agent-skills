@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Skill Pack",
+  "type": "object",
+  "required": ["id", "name", "version", "skills"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "description": { "type": "string" },
+    "skills": { "type": "array", "items": { "type": "string" } }
+  }
+}

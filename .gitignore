@@ -3,3 +3,4 @@
 *.log
 node_modules
 __pycache__
+linkedin_drafts/

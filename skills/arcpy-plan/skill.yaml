@@ -1,0 +1,27 @@
+id: arcpy-plan
+name: /arcpy-plan
+version: 0.1.0
+scope: public
+description: Generate a step-by-step ArcPy plan with risks and required inputs.
+inputs:
+  - name: task
+    type: string
+    required: true
+  - name: constraints
+    type: string
+    required: false
+  - name: data_context
+    type: string
+    required: false
+outputs:
+  - name: plan_steps
+    type: list
+  - name: required_inputs
+    type: list
+  - name: risks
+    type: list
+safety:
+  read_only: true
+artifacts:
+  - plan.md
+entrypoint: SKILL.md

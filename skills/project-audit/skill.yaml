@@ -1,0 +1,17 @@
+id: project-audit
+name: /project-audit
+version: 0.1.0
+scope: public
+description: Audit project layers for broken sources, SR mismatches, queries, joins.
+inputs:
+  - name: project_snapshot
+    type: object
+    required: true
+outputs:
+  - name: audit_report
+    type: file
+safety:
+  read_only: true
+artifacts:
+  - audit.md
+entrypoint: SKILL.md

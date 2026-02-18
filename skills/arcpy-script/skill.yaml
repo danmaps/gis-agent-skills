@@ -1,0 +1,23 @@
+id: arcpy-script
+name: /arcpy-script
+version: 0.1.0
+scope: public
+description: Generate an ArcGIS Pro script and a dry-run checklist.
+inputs:
+  - name: task
+    type: string
+    required: true
+  - name: environment
+    type: string
+    required: false
+outputs:
+  - name: script
+    type: file
+  - name: dry_run_checklist
+    type: list
+safety:
+  read_only: true
+artifacts:
+  - script.py
+  - dry_run.md
+entrypoint: SKILL.md

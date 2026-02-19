@@ -1,20 +1,15 @@
-# Skill: /arcpy-plan
+# ArcPy Plan
+Provide step-by-step ArcPy planning guidance before any code is written.
 
-## Purpose
-Given a task, produce a step-by-step ArcPy plan with risks and required inputs, without writing code.
+## Intent
+Help users clarify inputs, outputs, risks, and sequencing for ArcPy workflows.
 
-## Inputs
-- task (string)
-- constraints (optional)
-- data_context (optional)
+## Example prompts
+- Plan an ArcPy workflow to merge parcel layers and calculate area stats
+- Outline steps to batch update fields in a file geodatabase
+- Draft a safe plan to reproject and dissolve features
 
-## Outputs
-- plan_steps (list)
-- required_inputs (list)
-- risks (list)
-
-## Safety
-- Read-only planning. No changes to data.
-
-## Entrypoint
-- skill.yaml
+## Capabilities
+- Define required inputs and outputs
+- Identify risks and unknowns
+- Propose validation checks before execution

@@ -1,16 +1,13 @@
-# Skill: /symbology-compat
+# Symbology Compatibility
+Assess whether symbology will survive KMZ/Google Earth export.
 
-## Purpose
-Assess whether symbology will survive KMZ/Google Earth export and list fixes.
+## Intent
+Help users spot broken renderers and choose compatible alternatives.
 
-## Inputs
-- layer_snapshot (object)
+## Example prompts
+- Check if this layer’s symbology will export to KMZ cleanly
+- Recommend fallback styles for Google Earth
 
-## Outputs
-- compatibility_report (file)
-
-## Safety
-- Read-only assessment.
-
-## Entrypoint
-- skill.yaml
+## Capabilities
+- Identify incompatible renderers and symbols
+- Suggest safer alternatives and checks

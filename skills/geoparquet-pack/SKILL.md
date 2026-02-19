@@ -1,17 +1,13 @@
-# Skill: /geoparquet-pack
+# GeoParquet Pack
+Recommend GeoParquet layouts based on access patterns.
 
-## Purpose
-Recommend a GeoParquet layout: partitioning, column types, geometry encoding, row groups.
+## Intent
+Help users choose partitioning, encoding, and row group sizes.
 
-## Inputs
-- dataset_profile (object)
-- access_patterns (list)
+## Example prompts
+- Recommend a GeoParquet layout for read-heavy analytics
+- Suggest partitioning for a global point dataset
 
-## Outputs
-- layout_recommendation (object)
-
-## Safety
-- Advisory only.
-
-## Entrypoint
-- skill.yaml
+## Capabilities
+- Map workloads to partitioning strategies
+- Call out tradeoffs and risks

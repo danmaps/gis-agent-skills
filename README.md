@@ -2,23 +2,45 @@
 
 Vendor-neutral skills for GIS agents. Human-readable, framework-agnostic.
 
-## Structure
-- `skills/` — individual skills
-- `packs/` — collections of skills
-- `schemas/` — JSON/YAML schemas
-- `tools/` — tooling helpers
-- `examples/` — usage examples
-- `tests/` — validation checks
+## Minimal layout (Copilot-friendly)
+```
+gis-agent-skills/
+├── skills/
+│   └── <skill-name>/
+│       └── SKILL.md
+├── .github/
+│   ├── prompts/
+│   └── copilot-instructions.md
+├── README.md
+├── package.json
+```
 
-## What’s included (v0)
-- One sample skill scaffold
-- Minimal schemas
-- Pack example
+### What goes where
+- `skills/<skill-name>/SKILL.md`
+  - One-line summary
+  - Intent (what it helps with)
+  - Example prompts / expected inputs
+  - Capabilities
+- `.github/prompts/*.md`
+  - Slash commands for Copilot Chat/CLI
+- `.github/copilot-instructions.md`
+  - Base context for Copilot in this repo
+- `package.json`
+  - Optional metadata for `npx skills add`
+
+## How Copilot picks it up
+- Scans `skills/` for SKILL.md content
+- Loads `.github/prompts/` as slash commands
+- Uses `.github/copilot-instructions.md` as base context
+
+## Install options
+- Global: `npx skills add danmaps/gis-agent-skills --global`
+- Per-project: `npx skills add danmaps/gis-agent-skills`
 
 ## Contributing
-- Keep skills readable and conservative by default
-- Document inputs, outputs, safety, and artifacts
-- Prefer simple, inspectable patterns
+- Keep skills short and directive
+- Prefer examples over long explanations
+- Avoid extra docs inside skill folders
 
 ---
 

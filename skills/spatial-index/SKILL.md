@@ -1,18 +1,13 @@
-# Skill: /spatial-index
+# Spatial Index
+Propose spatial indexes and query rewrites.
 
-## Purpose
-Propose spatial indexes and query rewrites for PostGIS and SQL Server.
+## Intent
+Help users improve spatial query performance in PostGIS or SQL Server.
 
-## Inputs
-- schema_snapshot (object)
-- query_patterns (list)
+## Example prompts
+- Suggest indexes for these spatial query patterns
+- Rewrite this slow spatial join query
 
-## Outputs
-- index_recommendations (list)
-- query_rewrites (list)
-
-## Safety
-- Advisory only.
-
-## Entrypoint
-- skill.yaml
+## Capabilities
+- Recommend index types and parameters
+- Identify query patterns that cause full scans

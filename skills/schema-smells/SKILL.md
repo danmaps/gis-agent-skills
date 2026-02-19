@@ -1,17 +1,13 @@
-# Skill: /schema-smells
-
-## Purpose
+# Schema Smells
 Identify GIS data smells and propose constraints/tests.
 
-## Inputs
-- schema_snapshot (object)
+## Intent
+Help users detect risky schema patterns early.
 
-## Outputs
-- smell_list (list)
-- proposed_tests (list)
+## Example prompts
+- Find schema smells in this feature class description
+- Propose constraints and validation tests for this dataset
 
-## Safety
-- Read-only analysis.
-
-## Entrypoint
-- skill.yaml
+## Capabilities
+- Flag suspicious domains, null islands, unit mismatches
+- Recommend validation and cleanup steps

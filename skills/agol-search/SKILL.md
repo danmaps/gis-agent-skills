@@ -1,18 +1,13 @@
-# Skill: /agol-search
+# AGOL Search Plan
+Create a structured AGOL search plan and results template.
 
-## Purpose
-Turn a request into an AGOL search plan and results table format.
+## Intent
+Help users find items efficiently with clear criteria.
 
-## Inputs
-- request (string)
-- org_scope (optional)
+## Example prompts
+- Build a search plan for all hosted layers owned by X
+- Plan an AGOL search for specific tags and item types
 
-## Outputs
-- search_plan (object)
-- results_table_template (string)
-
-## Safety
-- Read-only planning.
-
-## Entrypoint
-- skill.yaml
+## Capabilities
+- Define item types, scopes, and keywords
+- Produce a results table schema

@@ -1,0 +1,6 @@
+{
+  "name": "gis-agent-skills",
+  "version": "0.1.0",
+  "description": "GIS skills for AI coding agents",
+  "keywords": ["skills", "gis", "arcgis", "copilot"]
+}

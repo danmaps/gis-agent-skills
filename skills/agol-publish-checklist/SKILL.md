@@ -1,16 +1,13 @@
-# Skill: /agol-publish-checklist
+# AGOL Publish Checklist
+Generate a preflight checklist for publishing hosted layers.
 
-## Purpose
-Preflight checklist for hosting a layer: fields, domains, extent, renderer, sharing, metadata, credits, sensitivity.
+## Intent
+Help users publish safely with proper metadata and sharing.
 
-## Inputs
-- layer_snapshot (object)
+## Example prompts
+- Create a publish checklist for this hosted feature layer
+- List checks before sharing a public AGOL item
 
-## Outputs
-- checklist (list)
-
-## Safety
-- Advisory only.
-
-## Entrypoint
-- skill.yaml
+## Capabilities
+- Validate fields, renderer, extent, sharing
+- Call out risks and missing metadata

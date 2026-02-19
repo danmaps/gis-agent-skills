@@ -1,18 +1,15 @@
-# Skill: /arcpy-script
+# ArcPy Script
+Generate production-ready ArcPy scripts for ArcGIS Pro tasks.
 
-## Purpose
-Generate a single-file ArcGIS Pro script plus a dry-run checklist.
+## Intent
+Create robust, maintainable scripts with validation, logging, and safe defaults.
 
-## Inputs
-- task (string)
-- environment (optional)
+## Example prompts
+- Write an ArcPy script to merge shapefiles and calculate area
+- Generate a script to select features, buffer, and export
+- Create a batch updater for feature class attributes
 
-## Outputs
-- script (file)
-- dry_run_checklist (list)
-
-## Safety
-- Call out destructive steps explicitly.
-
-## Entrypoint
-- skill.yaml
+## Capabilities
+- Validate inputs, fields, and spatial references
+- Handle locks and empty datasets safely
+- Use cursors efficiently with clear logging

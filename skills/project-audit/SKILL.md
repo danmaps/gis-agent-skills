@@ -1,16 +1,13 @@
-# Skill: /project-audit
+# Project Audit
+Produce a GIS project audit checklist and report template.
 
-## Purpose
-Inspect project layers conceptually and output an audit report template.
+## Intent
+Help users identify broken sources, SR mismatches, and risky configuration.
 
-## Inputs
-- project_snapshot (object)
+## Example prompts
+- Audit this ArcGIS Pro project for broken layers
+- List common failures in map documents and how to check them
 
-## Outputs
-- audit_report (file)
-
-## Safety
-- Read-only inspection.
-
-## Entrypoint
-- skill.yaml
+## Capabilities
+- Enumerate audit checks by category
+- Provide validation steps and expected outcomes

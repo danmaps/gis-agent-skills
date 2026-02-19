@@ -1,3 +1,8 @@
+---
+name: sample-qa-skill
+description: Validate a GIS result using a simple checklist of inputs, outputs, and safety checks
+---
+
 # Skill: Sample QA Check
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: arcpy-script
+description: Generate production-ready ArcPy scripts for ArcGIS Pro tasks with validation, logging, and safe defaults
+---
+
 # ArcPy Script
 Generate production-ready ArcPy scripts for ArcGIS Pro tasks.
 

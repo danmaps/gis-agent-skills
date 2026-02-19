@@ -1,3 +1,8 @@
+---
+name: schema-smells
+description: Identify GIS data schema smells and propose constraints and validation tests to detect risky patterns early
+---
+
 # Schema Smells
 Identify GIS data smells and propose constraints/tests.
 

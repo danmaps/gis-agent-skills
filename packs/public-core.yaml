@@ -3,4 +3,4 @@ name: Public Core
 version: 0.1.0
 description: Minimal public skills pack
 skills:
-  - skills/sample-qa-skill
+  - skills/agol-search

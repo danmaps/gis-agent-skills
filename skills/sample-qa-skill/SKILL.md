@@ -8,6 +8,9 @@ description: Validate a GIS result using a simple checklist of inputs, outputs, 
 ## Purpose
 Validate a GIS result using a simple checklist.
 
+## Intent
+Verify that a generated map, export, or geoprocessing output meets basic quality expectations.
+
 ## Inputs
 - `artifact_path` (string) — path to a generated map or output
 - `task_summary` (string) — what was supposed to happen

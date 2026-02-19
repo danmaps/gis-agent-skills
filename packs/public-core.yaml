@@ -8,3 +8,8 @@ skills:
   - skills/arcpy-plan
   - skills/arcpy-script
   - skills/agol-publish-checklist
+  - skills/project-audit
+  - skills/symbology-compat
+  - skills/schema-smells
+  - skills/geoparquet-pack
+  - skills/spatial-index

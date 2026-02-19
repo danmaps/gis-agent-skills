@@ -1,3 +1,8 @@
+---
+name: agol-search
+description: Create a structured ArcGIS Online search plan and results template to find items efficiently
+---
+
 # AGOL Search Plan
 Create a structured AGOL search plan and results template.
 

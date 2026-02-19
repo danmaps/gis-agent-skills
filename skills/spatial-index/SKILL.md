@@ -1,3 +1,8 @@
+---
+name: spatial-index
+description: Propose spatial indexes and query rewrites to improve spatial query performance in PostGIS or SQL Server
+---
+
 # Spatial Index
 Propose spatial indexes and query rewrites.
 

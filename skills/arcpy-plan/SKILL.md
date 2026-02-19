@@ -1,3 +1,8 @@
+---
+name: arcpy-plan
+description: Provide step-by-step ArcPy planning guidance before any code is written, clarifying inputs, outputs, and risks
+---
+
 # ArcPy Plan
 Provide step-by-step ArcPy planning guidance before any code is written.
 

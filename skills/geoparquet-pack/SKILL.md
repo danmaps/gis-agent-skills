@@ -1,3 +1,8 @@
+---
+name: geoparquet-pack
+description: Recommend GeoParquet layouts, partitioning strategies, and encoding options based on access patterns
+---
+
 # GeoParquet Pack
 Recommend GeoParquet layouts based on access patterns.
 

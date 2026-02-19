@@ -1,3 +1,8 @@
+---
+name: symbology-compat
+description: Assess whether ArcGIS symbology will survive KMZ/Google Earth export and suggest compatible alternatives
+---
+
 # Symbology Compatibility
 Assess whether symbology will survive KMZ/Google Earth export.
 

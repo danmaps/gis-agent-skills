@@ -1,3 +1,8 @@
+---
+name: project-audit
+description: Produce a GIS project audit checklist and report template to identify broken sources, SR mismatches, and risky configuration
+---
+
 # Project Audit
 Produce a GIS project audit checklist and report template.
 

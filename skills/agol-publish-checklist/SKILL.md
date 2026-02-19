@@ -1,3 +1,8 @@
+---
+name: agol-publish-checklist
+description: Generate a preflight checklist for publishing hosted layers in ArcGIS Online
+---
+
 # AGOL Publish Checklist
 Generate a preflight checklist for publishing hosted layers.
 

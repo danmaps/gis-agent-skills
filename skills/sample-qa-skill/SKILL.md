@@ -1,30 +1,22 @@
 ---
 name: sample-qa-skill
-description: Validate a GIS result using a simple checklist of inputs, outputs, and safety checks
+description: Minimal Q&A skill example with clear inputs and outputs
 ---
 
-# Skill: Sample QA Check
+# Sample QA Skill
 
-## Purpose
-Validate a GIS result using a simple checklist.
-
-## Intent
-Verify that a generated map, export, or geoprocessing output meets basic quality expectations.
+A tiny example skill that answers a question succinctly.
 
 ## Inputs
-- `artifact_path` (string) — path to a generated map or output
-- `task_summary` (string) — what was supposed to happen
 
-## Outputs
-- `status` (ok|warn|fail)
-- `notes` (string)
+- `question` (string)
 
-## Safety
-- Never alter source data
-- Only read files from provided paths
+## Output
 
-## Artifacts
-- `qa_report.md`
+- `answer` (string)
 
-## Entrypoint
-- `skill.yaml`
+## Example
+
+**User:** “What is a geodatabase?”
+
+**Output:** “A geodatabase is Esri’s container format for storing spatial data, tables, and relationships.”

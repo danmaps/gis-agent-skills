@@ -30,6 +30,15 @@ Produce scripts that work on the first run by grounding the prompt in:
 
 ## Context Capture (mirror arcgispro_ai)
 
+### Use arcgispro-cli for real project context
+
+If available, call `arcgispro-cli` to fetch live project details:
+- `arcgispro layers --json` for exact layer names and types
+- `arcgispro fields "LayerName"` for real field schemas
+- `arcgispro context` for full project dump
+
+Prefer actual layer/field names from these outputs over guesses.
+
 When available, build a `map_info` JSON payload that includes:
 - Map metadata: name, title, description, spatial reference, units, rotation, time-enabled
 - Layer summaries: visibility, layer type, data source type, extent, spatial reference

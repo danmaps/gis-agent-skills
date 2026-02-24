@@ -21,6 +21,7 @@ This repo fills that gap. 🗺️
 | [`/project-audit`](skills/project-audit/SKILL.md) | Audit an ArcGIS Pro project for common issues |
 | [`/symbology-compat`](skills/symbology-compat/SKILL.md) | Check if symbology survives KMZ/Google Earth export |
 | [`/schema-smells`](skills/schema-smells/SKILL.md) | Detect data smells and propose constraints |
+| [`/analysis-readiness-check`](skills/analysis-readiness-check/SKILL.md) | Decide if data is ready for a specific analysis (and list blockers) |
 | [`/geoparquet-pack`](skills/geoparquet-pack/SKILL.md) | Recommend GeoParquet layout and partitioning |
 | [`/spatial-index`](skills/spatial-index/SKILL.md) | PostGIS/SQL Server index and query optimization |
 | [`/sample-qa-skill`](skills/sample-qa-skill/SKILL.md) | Validate a GIS result with a simple checklist |

@@ -13,3 +13,4 @@ skills:
   - skills/schema-smells
   - skills/geoparquet-pack
   - skills/spatial-index
+  - skills/gis-microapp-ux-spec

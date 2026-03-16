@@ -24,6 +24,7 @@ This repo fills that gap. 🗺️
 | [`/geoparquet-pack`](skills/geoparquet-pack/SKILL.md) | Recommend GeoParquet layout and partitioning |
 | [`/spatial-index`](skills/spatial-index/SKILL.md) | PostGIS/SQL Server index and query optimization |
 | [`/sample-qa-skill`](skills/sample-qa-skill/SKILL.md) | Validate a GIS result with a simple checklist |
+| [`/gis-microapp-ux-spec`](skills/gis-microapp-ux-spec/SKILL.md) | Define and validate the UX contract for GIS demo micro-apps |
 
 ## Getting Started
 

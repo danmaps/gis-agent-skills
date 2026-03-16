@@ -24,3 +24,16 @@ Recommend or apply spatial indexing to improve query performance.
 **User:** “Create spatial index for Parcels in a file geodatabase.”
 
 **Output:** ArcPy AddSpatialIndex step with warnings about locks.
+
+## Intent
+
+State the operational goal of the skill and what good output should accomplish.
+
+## Outputs
+
+Return a concise, usable result with the key artifacts or recommendations.
+
+## Safety
+
+Do not invent data, credentials, or system context. Flag uncertainty and risky operations clearly.
+

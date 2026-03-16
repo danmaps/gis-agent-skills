@@ -37,3 +37,16 @@ List of items with:
 **User:** “Find county parcels feature layers.”
 
 **Output:** 5–10 items with URLs and owners, filtered to Feature Layer.
+
+## Intent
+
+State the operational goal of the skill and what good output should accomplish.
+
+## Outputs
+
+Return a concise, usable result with the key artifacts or recommendations.
+
+## Safety
+
+Do not invent data, credentials, or system context. Flag uncertainty and risky operations clearly.
+

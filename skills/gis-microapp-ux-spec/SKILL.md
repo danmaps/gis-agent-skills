@@ -63,3 +63,16 @@ Produce:
 
 If you need the full UX contract and acceptance checklist, read:
 - `references/gis-microapp-ux-spec.md`
+
+## Inputs
+
+List or infer the required inputs before doing work.
+
+## Outputs
+
+Return a concise, usable result with the key artifacts or recommendations.
+
+## Safety
+
+Do not invent data, credentials, or system context. Flag uncertainty and risky operations clearly.
+

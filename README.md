@@ -108,17 +108,6 @@ gis-agent-skills/
 - **`tests/`** — lightweight repo validation support
 - **`examples/`** — currently minimal; not yet a real gallery of worked examples
 
-## Current direction
-
-The repo is moving in two complementary directions:
-
-- **platform-native GIS skills**
-  - ArcPy, AGOL, project auditing, schema, indexing, publishing
-- **delivery-oriented GIS skills**
-  - patterns for believable GIS demo apps, micro-app UX, and request-to-deliverable framing
-
-That second category is what connects this repo more directly to portfolio examples, Symphony missions, and fast-turn GIS client work.
-
 ## Contributing
 
 - Keep skills short and directive — agents skim, they don’t study

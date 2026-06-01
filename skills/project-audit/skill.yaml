@@ -1,0 +1,20 @@
+id: project-audit
+name: project-audit
+version: 0.1.0
+scope: public
+description: Audit ArcGIS Pro projects for broken layers, schema issues, and performance
+  risks
+inputs:
+- name: task_description
+  type: string
+  required: true
+  description: Description of the task
+outputs:
+- name: result
+  type: string
+  description: Skill output
+safety:
+  read_only: true
+  notes: Advisory skill — does not modify data.
+artifacts: []
+entrypoint: SKILL.md

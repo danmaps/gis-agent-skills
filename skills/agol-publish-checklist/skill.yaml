@@ -1,0 +1,33 @@
+id: agol-publish-checklist
+name: AGOL Publish Checklist
+version: 0.1.0
+scope: public
+description: Create a pre-publish checklist for ArcGIS Online items with risk and data quality checks.
+inputs:
+  - name: dataset_type
+    type: string
+    required: true
+    enum: [feature layer, table, raster, tile]
+    description: "Type of dataset to publish"
+  - name: data_source
+    type: string
+    required: true
+    description: "Path or URL to the source data"
+  - name: target_audience
+    type: string
+    required: false
+    description: "Intended audience for the published item"
+  - name: sensitivity
+    type: string
+    required: false
+    description: "Data sensitivity level"
+outputs:
+  - name: checklist
+    type: string
+    description: "Pre-publish checklist grouped by category"
+safety:
+  read_only: true
+  notes: "Advisory only — generates a checklist, does not publish or modify data."
+artifacts:
+  - agol_publish_checklist.md
+entrypoint: SKILL.md

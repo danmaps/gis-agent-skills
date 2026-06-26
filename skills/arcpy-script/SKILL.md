@@ -75,3 +75,12 @@ When available, build a `map_info` JSON payload that includes:
 **User:** “Select the 3 counties with lowest population density and zoom to them.”
 
 **Agent output:** Python only, using `SelectLayerByAttribute`, `SearchCursor`, and `active_view.camera.setExtent(...)`.
+
+## Outputs
+
+Return a concise, usable result with the key artifacts or recommendations.
+
+## Safety
+
+Do not invent data, credentials, or system context. Flag uncertainty and risky operations clearly.
+

@@ -11,5 +11,9 @@ skills:
   - skills/project-audit
   - skills/symbology-compat
   - skills/schema-smells
+  - skills/analysis-readiness-check
+  - skills/data-smells-summary
+  - skills/post-run-validation
   - skills/geoparquet-pack
   - skills/spatial-index
+  - skills/gis-microapp-ux-spec

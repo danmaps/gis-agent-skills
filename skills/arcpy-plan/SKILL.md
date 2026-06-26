@@ -48,3 +48,12 @@ A plan object with:
 4) Select parcels by location intersecting buffer
 5) Export selection to Output.gdb
 6) Report counts
+
+## Outputs
+
+Return a concise, usable result with the key artifacts or recommendations.
+
+## Safety
+
+Do not invent data, credentials, or system context. Flag uncertainty and risky operations clearly.
+

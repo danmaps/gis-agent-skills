@@ -25,3 +25,16 @@ Generate a GeoParquet export plan and metadata bundle for a GIS layer.
 **User:** “Package parcels to GeoParquet.”
 
 **Output:** Steps to export, validate, and write metadata.
+
+## Intent
+
+State the operational goal of the skill and what good output should accomplish.
+
+## Outputs
+
+Return a concise, usable result with the key artifacts or recommendations.
+
+## Safety
+
+Do not invent data, credentials, or system context. Flag uncertainty and risky operations clearly.
+

@@ -1,0 +1,19 @@
+id: sample-qa-skill
+name: sample-qa-skill
+version: 0.1.0
+scope: public
+description: Minimal Q&A skill example with clear inputs and outputs
+inputs:
+- name: task_description
+  type: string
+  required: true
+  description: Description of the task
+outputs:
+- name: result
+  type: string
+  description: Skill output
+safety:
+  read_only: true
+  notes: Advisory skill — does not modify data.
+artifacts: []
+entrypoint: SKILL.md

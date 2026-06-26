@@ -34,3 +34,16 @@ Each finding should include: layer name, cause, and suggested fix.
 **User:** “Audit my project for broken layers.”
 
 **Output:** List of broken paths with suggested repair actions.
+
+## Intent
+
+State the operational goal of the skill and what good output should accomplish.
+
+## Outputs
+
+Return a concise, usable result with the key artifacts or recommendations.
+
+## Safety
+
+Do not invent data, credentials, or system context. Flag uncertainty and risky operations clearly.
+

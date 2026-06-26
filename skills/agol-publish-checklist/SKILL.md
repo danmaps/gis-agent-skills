@@ -34,3 +34,16 @@ Checklist grouped by:
 **User:** “Publish a county parcels feature layer.”
 
 **Output:** Checklist covering schema validation, metadata, scale dependencies, and sharing settings.
+
+## Intent
+
+State the operational goal of the skill and what good output should accomplish.
+
+## Outputs
+
+Return a concise, usable result with the key artifacts or recommendations.
+
+## Safety
+
+Do not invent data, credentials, or system context. Flag uncertainty and risky operations clearly.
+

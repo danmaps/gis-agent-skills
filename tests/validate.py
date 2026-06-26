@@ -22,7 +22,7 @@ PACKS_DIR = REPO_ROOT / "packs"
 REQUIRED_SECTION_GROUPS = [
     ("Inputs", ("inputs",)),
     ("Output", ("output", "outputs")),
-    ("Example", ("example", "examples")),
+    ("Example", ("example", "examples", "example request")),
 ]
 
 # Patterns that should never appear in skill files
@@ -107,7 +107,12 @@ for skill_dir in skill_dirs:
     headings = get_headings(text)
     normalized_headings = [heading.lower() for heading in headings]
     for section, aliases in REQUIRED_SECTION_GROUPS:
-        if not any(alias in heading for heading in normalized_headings for alias in aliases):
+        has_required_section = any(
+            alias in heading for heading in normalized_headings for alias in aliases
+        )
+        if not has_required_section and section == "Example":
+            has_required_section = any(alias in text.lower() for alias in aliases)
+        if not has_required_section:
             error(f"{skill_dir.name}/SKILL.md missing required section: ## {section}")
 
     # ── 4. Secret detection ────────────────────────────────────

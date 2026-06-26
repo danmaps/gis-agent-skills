@@ -41,6 +41,7 @@ This is currently a **skills library**, not a GIS runtime, not a full app framew
 | [`/project-audit`](skills/project-audit/SKILL.md) | Audit an ArcGIS Pro project for common issues |
 | [`/symbology-compat`](skills/symbology-compat/SKILL.md) | Check if symbology survives KMZ/Google Earth export |
 | [`/schema-smells`](skills/schema-smells/SKILL.md) | Detect data smells and propose constraints |
+| [`/analysis-readiness-check`](skills/analysis-readiness-check/SKILL.md) | Decide if data is ready for a specific analysis (and list blockers) |
 | [`/data-smells-summary`](skills/data-smells-summary/SKILL.md) | Turn diagnostics into a ranked plain-language risk summary |
 | [`/post-run-validation`](skills/post-run-validation/SKILL.md) | Validate outputs after running analysis/scripts (counts, extents, null spikes) |
 | [`/geoparquet-pack`](skills/geoparquet-pack/SKILL.md) | Recommend GeoParquet layout and partitioning |

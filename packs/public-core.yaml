@@ -11,5 +11,6 @@ skills:
   - skills/project-audit
   - skills/symbology-compat
   - skills/schema-smells
+  - skills/data-smells-summary
   - skills/geoparquet-pack
   - skills/spatial-index

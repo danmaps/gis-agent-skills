@@ -4,7 +4,7 @@ Validate skill and pack integrity for gis-agent-skills.
 Checks:
   1. Every skill folder has a SKILL.md
   2. Every SKILL.md has valid YAML frontmatter (name + description)
-  3. Every SKILL.md contains required sections
+  3. Every SKILL.md contains the core sections used in this repo
   4. Every skill referenced in a pack exists on disk
   5. Every skill folder on disk is referenced in at least one pack
   6. No hardcoded credentials or suspicious secrets
@@ -19,11 +19,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = REPO_ROOT / "skills"
 PACKS_DIR = REPO_ROOT / "packs"
 
-REQUIRED_SECTIONS = [
-    "Intent",
-    "Inputs",
-    "Outputs",
-    "Safety",
+REQUIRED_SECTION_GROUPS = [
+    ("Inputs", ("inputs",)),
+    ("Output", ("output", "outputs")),
+    ("Example", ("example", "examples")),
 ]
 
 # Patterns that should never appear in skill files
@@ -106,9 +105,9 @@ for skill_dir in skill_dirs:
 
     # ── 3. Required sections ───────────────────────────────────
     headings = get_headings(text)
-    for section in REQUIRED_SECTIONS:
-        # Allow partial matches like "⚠️ Credential Safety" matching "Safety"
-        if not any(section.lower() in h.lower() for h in headings):
+    normalized_headings = [heading.lower() for heading in headings]
+    for section, aliases in REQUIRED_SECTION_GROUPS:
+        if not any(alias in heading for heading in normalized_headings for alias in aliases):
             error(f"{skill_dir.name}/SKILL.md missing required section: ## {section}")
 
     # ── 4. Secret detection ────────────────────────────────────

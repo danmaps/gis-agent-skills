@@ -28,3 +28,16 @@ Review layer symbology and flag compatibility issues across platforms.
 **User:** “Will this map work in AGOL?”
 
 **Output:** Flags for unsupported renderers and recommended fallbacks.
+
+## Intent
+
+State the operational goal of the skill and what good output should accomplish.
+
+## Outputs
+
+Return a concise, usable result with the key artifacts or recommendations.
+
+## Safety
+
+Do not invent data, credentials, or system context. Flag uncertainty and risky operations clearly.
+

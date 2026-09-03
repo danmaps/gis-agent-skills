@@ -1,5 +1,7 @@
 # 🌍 GIS Agent Skills
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z4L326AT14)
+
 Teach your AI coding agent to think spatially.
 
 A vendor-neutral, framework-agnostic library of GIS skills — written in Markdown and YAML so any agent can pick them up. No SDK, no runtime, no lock-in. Just files that make AI assistants dramatically better at geospatial work.

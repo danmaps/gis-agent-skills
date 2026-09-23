@@ -40,6 +40,8 @@ This is currently a **skills library**, not a GIS runtime, not a full app framew
 | [`/agol-publish-checklist`](skills/agol-publish-checklist/SKILL.md) | Preflight checklist before publishing hosted layers |
 | [`/arcpy-plan`](skills/arcpy-plan/SKILL.md) | Plan an ArcPy workflow before writing code |
 | [`/arcpy-script`](skills/arcpy-script/SKILL.md) | Generate production-ready ArcPy scripts |
+| [`/scaffold`](skills/scaffold/SKILL.md) | Decide when an ArcPy script needs project structure and scaffold the smallest useful layout |
+| [`/safety`](skills/safety/SKILL.md) | Add dry-run defaults, preflight checks, confirmations, and run receipts around ArcPy writes |
 | [`/project-audit`](skills/project-audit/SKILL.md) | Audit an ArcGIS Pro project for common issues |
 | [`/symbology-compat`](skills/symbology-compat/SKILL.md) | Check if symbology survives KMZ/Google Earth export |
 | [`/schema-smells`](skills/schema-smells/SKILL.md) | Detect data smells and propose constraints |
@@ -79,6 +81,18 @@ arcgispro install            # installs the ArcGIS Pro add-in
 ```
 
 Snap your project in ArcGIS Pro, then your agent can inspect real layers, fields, and connections instead of guessing.
+
+## Worked example: scaffold first, then add safety
+
+A natural ArcPy flow is:
+
+`/arcpy-plan` → `/scaffold` → `/arcpy-script` → `/safety` → `/post-run-validation`
+
+Example:
+1. Start with a one-file parcel update script that buffers schools and appends changed parcels into a shared geodatabase.
+2. Use [`/scaffold`](skills/scaffold/SKILL.md) to move reusable logic into `src/parcels/workflow.py`, keep ArcPy writes in `arcpy_ops.py`, add shared logging, and move paths into `config/settings.yaml`.
+3. Use [`/safety`](skills/safety/SKILL.md) to make the first run a dry-run, require preflight checks for schema, locks, approved workspace, and backups, then block production writes until the user supplies the confirmation phrase.
+4. Finish with [`/post-run-validation`](skills/post-run-validation/SKILL.md) to verify counts, extents, and field sanity after execution.
 
 ## Repo Layout
 

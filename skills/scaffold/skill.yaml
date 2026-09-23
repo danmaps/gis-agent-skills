@@ -1,0 +1,19 @@
+id: scaffold
+name: scaffold
+version: 0.1.0
+scope: public
+description: Turn an ArcPy script into a maintainable project structure without unnecessary architecture.
+inputs:
+  - name: task_description
+    type: string
+    required: true
+    description: Description of the ArcPy workflow or script.
+outputs:
+  - name: result
+    type: string
+    description: Recommended structure, migration plan, and testing boundaries.
+safety:
+  read_only: true
+  notes: Advisory skill — recommends project structure and migration steps only.
+artifacts: []
+entrypoint: SKILL.md

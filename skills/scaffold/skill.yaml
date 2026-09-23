@@ -8,6 +8,26 @@ inputs:
     type: string
     required: true
     description: Description of the ArcPy workflow or script.
+  - name: current_script_path
+    type: string
+    required: false
+    description: Path to the existing ArcPy script being evaluated or migrated.
+  - name: project_root
+    type: string
+    required: false
+    description: Target project root for any recommended structure.
+  - name: workflow_type
+    type: string
+    required: false
+    description: Workflow shape such as single_script, batch, script_tool, or python_toolbox.
+  - name: constraints
+    type: string
+    required: false
+    description: Constraints that limit the structure or migration approach.
+  - name: target_environment
+    type: string
+    required: false
+    description: Runtime environment such as ArcGIS Pro on Windows, a scheduled task, or a toolbox.
 outputs:
   - name: result
     type: string

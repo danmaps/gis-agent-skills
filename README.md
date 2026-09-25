@@ -52,6 +52,7 @@ This is currently a **skills library**, not a GIS runtime, not a full app framew
 | [`/spatial-index`](skills/spatial-index/SKILL.md) | PostGIS/SQL Server index and query optimization |
 | [`/sample-qa-skill`](skills/sample-qa-skill/SKILL.md) | Validate a GIS result with a simple checklist |
 | [`/gis-microapp-ux-spec`](skills/gis-microapp-ux-spec/SKILL.md) | Define and validate the UX contract for GIS demo micro-apps and fast-turn map deliverables |
+| [`/living-atlas`](skills/living-atlas/SKILL.md) | Find, vet, and safely use Esri Living Atlas layers for production GIS work |
 
 ## Getting Started
 

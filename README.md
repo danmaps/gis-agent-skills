@@ -44,6 +44,7 @@ This is currently a **skills library**, not a GIS runtime, not a full app framew
 | [`/safety`](skills/safety/SKILL.md) | Add dry-run defaults, preflight checks, confirmations, and run receipts around ArcPy writes |
 | [`/project-audit`](skills/project-audit/SKILL.md) | Audit an ArcGIS Pro project for common issues |
 | [`/symbology-compat`](skills/symbology-compat/SKILL.md) | Check if symbology survives KMZ/Google Earth export |
+| [`/kml-author`](skills/kml-author/SKILL.md) | Author clean KML/KMZ with shared styles, NetworkLinks, Regions/LOD, packaging, and validation |
 | [`/schema-smells`](skills/schema-smells/SKILL.md) | Detect data smells and propose constraints |
 | [`/analysis-readiness-check`](skills/analysis-readiness-check/SKILL.md) | Decide if data is ready for a specific analysis (and list blockers) |
 | [`/data-smells-summary`](skills/data-smells-summary/SKILL.md) | Turn diagnostics into a ranked plain-language risk summary |

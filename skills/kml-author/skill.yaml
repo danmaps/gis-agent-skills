@@ -20,6 +20,10 @@ inputs:
   type: string
   required: false
   description: kml, kmz, hosted_kml, or network_link
+- name: style_requirements
+  type: string
+  required: false
+  description: Desired visual outcome such as icons, colors, line weights, fills, folders, or highlight behavior.
 - name: symbology_requirements
   type: string
   required: false

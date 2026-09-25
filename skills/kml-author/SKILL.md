@@ -20,8 +20,8 @@ Use KML as a visualization and delivery format, not as a substitute for a full G
 - `target_client` (string, optional): Google Earth web, Google Earth Pro, ArcGIS, or general KML 2.x
 - `delivery_mode` (string, optional): kml, kmz, hosted_kml, network_link
 - `scale_pattern` (string, optional): small/static, large/static, frequently_updated, tiled_by_region
-- `style_requirements` (string, optional)
-- `symbology_requirements` (string, optional): icons, colors, line/polygon styling, and known cross-client compatibility concerns
+- `style_requirements` (string, optional): desired visual outcome such as icons, colors, line weights, fills, folders, or highlight behavior
+- `symbology_requirements` (string, optional): compatibility constraints, acceptable simplifications, and renderer behaviors that must survive across target clients
 - `popup_requirements` (string, optional): fields, HTML, media, and what should or should not appear in descriptions
 - `label_requirements` (string, optional): whether labels are required, how they should behave, and any client-specific expectations
 - `interaction_requirements` (string, optional): popups, folders, time, tours, overlays, camera/view behavior
@@ -38,7 +38,7 @@ Confirm or ask about:
 
 1. which layers are included, what geometry type each layer uses, and whether they should stay separate or be grouped
 2. which KML clients must work and whether Google Earth, ArcGIS, or browser viewers all need acceptable behavior
-3. which symbology must survive export, what can be simplified, and whether `/symbology-compat` should be used first
+3. what the desired styling is, which symbology must survive export, what can be simplified, and whether `/symbology-compat` should be used first
 4. what popup content should appear, which fields should be hidden, and whether HTML, media, or links are required
 5. whether labels are required, what text should label features, and how important client-specific label behavior is
 6. whether file size, feature count, responsiveness, offline use, or attachment bundling creates KML vs KMZ vs NetworkLink constraints

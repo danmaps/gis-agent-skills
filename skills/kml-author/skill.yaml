@@ -8,6 +8,10 @@ inputs:
   type: string
   required: true
   description: Description of the KML/KMZ authoring or refactoring task
+- name: layer_inventory
+  type: string
+  required: false
+  description: Layers to include, their geometry types, and any grouping expectations.
 - name: target_client
   type: string
   required: false
@@ -16,6 +20,26 @@ inputs:
   type: string
   required: false
   description: kml, kmz, hosted_kml, or network_link
+- name: style_requirements
+  type: string
+  required: false
+  description: Desired visual outcome such as icons, colors, line weights, fills, folders, or highlight behavior.
+- name: symbology_requirements
+  type: string
+  required: false
+  description: Required styling plus known compatibility concerns across intended KML clients.
+- name: popup_requirements
+  type: string
+  required: false
+  description: Popup fields, formatting, media, or content constraints for descriptions.
+- name: label_requirements
+  type: string
+  required: false
+  description: Label content and any client-specific label behavior expectations.
+- name: size_constraints
+  type: string
+  required: false
+  description: Expected feature count, file size, packaging limits, and performance constraints.
 outputs:
 - name: result
   type: string

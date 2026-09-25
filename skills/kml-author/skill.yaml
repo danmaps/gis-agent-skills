@@ -1,0 +1,28 @@
+id: kml-author
+name: kml-author
+version: 0.1.0
+scope: public
+description: Author clean, portable KML/KMZ with deliberate structure, shared styles, links, regions, and validation
+inputs:
+- name: task_description
+  type: string
+  required: true
+  description: Description of the KML/KMZ authoring or refactoring task
+- name: target_client
+  type: string
+  required: false
+  description: Intended KML client such as Google Earth web, Google Earth Pro, ArcGIS, or general KML 2.x
+- name: delivery_mode
+  type: string
+  required: false
+  description: kml, kmz, hosted_kml, or network_link
+outputs:
+- name: result
+  type: string
+  description: KML/KMZ authoring result, packaging plan, or validation report
+safety:
+  read_only: true
+  notes: Advisory authoring skill. Do not invent coordinates, credentials, URLs, or client capabilities.
+artifacts:
+- SKILL.md
+entrypoint: SKILL.md

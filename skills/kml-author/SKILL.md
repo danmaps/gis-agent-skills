@@ -38,7 +38,7 @@ Confirm or ask about:
 
 1. which layers are included, what geometry type each layer uses, and whether they should stay separate or be grouped
 2. which KML clients must work and whether Google Earth, ArcGIS, or browser viewers all need acceptable behavior
-3. what the desired styling is, which symbology must survive export, what can be simplified, and whether `/symbology-compat` should be used first
+3. what the desired styling is, which symbology must survive export, what can be simplified, and whether a separate symbology compatibility check is needed before authoring
 4. what popup content should appear, which fields should be hidden, and whether HTML, media, or links are required
 5. whether labels are required, what text should label features, and how important client-specific label behavior is
 6. whether file size, feature count, responsiveness, offline use, or attachment bundling creates KML vs KMZ vs NetworkLink constraints

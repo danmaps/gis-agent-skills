@@ -6,6 +6,8 @@ Teach your AI coding agent to think spatially.
 
 A vendor-neutral, framework-agnostic library of GIS skills — written in Markdown and YAML so any agent can pick them up. No SDK, no runtime, no lock-in. Just files that make AI assistants dramatically better at geospatial work.
 
+Built by [Danny McVey](https://dannymcvey.com) — I help analysts and engineers become capable AI builders.
+
 ## Why?
 
 A quick scan of popular agent skill catalogs reveals a gap: almost none are truly GIS-native. They assume tabular data, generic APIs, or frontend concerns. Few of them understand projections, spatial joins, topology, geometry validity, publishing constraints, or how GIS work turns into actual deliverables.

@@ -141,6 +141,10 @@ Return the preflight report, compatibility findings, package path and size, reta
 
 For a rejected candidate, return the blocking requirements and the recommended architecture instead of generating misleading vector-tile steps.
 
+## Example request
+
+> Assess the read-only "County Boundaries" map in my ArcGIS Pro project for hosted vector tile publishing. Users only need to pan, zoom, and see county names; do not publish yet. Report compatibility warnings and prepare the packaging steps.
+
 ## Cost and storage language
 
 Explain that vector tile layers use ArcGIS Online's tile-storage model rather than hosted feature storage and may be materially cheaper for this use case. Do not hard-code credit rates because they change. Label any organization-specific comparison as an estimate and identify its source and date.
@@ -163,4 +167,3 @@ Explain that vector tile layers use ArcGIS Online's tile-storage model rather th
 - `references/vector-tile-limitations.md`
 - `references/publishing-patterns.md`
 - `scripts/publish_static_map.py`
-

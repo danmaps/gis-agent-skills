@@ -1,0 +1,47 @@
+id: safety
+name: safety
+version: 0.1.0
+scope: public
+description: Add a safety harness around ArcPy workflows that can modify data or production systems.
+inputs:
+  - name: task_description
+    type: string
+    required: true
+    description: Description of the ArcPy workflow and proposed writes.
+  - name: source_workspace
+    type: string
+    required: true
+    description: Source workspace, dataset, or service being read.
+  - name: target_workspace
+    type: string
+    required: true
+    description: Target workspace, dataset, or service that may be modified.
+  - name: approved_workspace
+    type: string
+    required: false
+    description: Approved write boundary for the workflow.
+  - name: expected_change
+    type: string
+    required: true
+    description: Expected data change, volume delta, or operational outcome.
+  - name: reviewer
+    type: string
+    required: false
+    description: Human reviewer or approver associated with the run.
+  - name: environment
+    type: string
+    required: false
+    description: Execution environment such as dev, test, or prod.
+  - name: current_script_path
+    type: string
+    required: false
+    description: Path to the ArcPy script or entrypoint being guarded.
+outputs:
+  - name: result
+    type: string
+    description: Safety plan, preflight checks, confirmation boundary, and receipt guidance.
+safety:
+  read_only: true
+  notes: Advisory skill — defines controls and approvals before any writes occur.
+artifacts: []
+entrypoint: SKILL.md

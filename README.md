@@ -1,8 +1,12 @@
 # 🌍 GIS Agent Skills
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z4L326AT14)
+
 Teach your AI coding agent to think spatially.
 
 A vendor-neutral, framework-agnostic library of GIS skills — written in Markdown and YAML so any agent can pick them up. No SDK, no runtime, no lock-in. Just files that make AI assistants dramatically better at geospatial work.
+
+Built by [Danny McVey](https://dannymcvey.com) — I help analysts and engineers become capable AI builders.
 
 ## Why?
 
@@ -38,14 +42,21 @@ This is currently a **skills library**, not a GIS runtime, not a full app framew
 | [`/agol-publish-checklist`](skills/agol-publish-checklist/SKILL.md) | Preflight checklist before publishing hosted layers |
 | [`/arcpy-plan`](skills/arcpy-plan/SKILL.md) | Plan an ArcPy workflow before writing code |
 | [`/arcpy-script`](skills/arcpy-script/SKILL.md) | Generate production-ready ArcPy scripts |
+| [`/scaffold`](skills/scaffold/SKILL.md) | Decide when an ArcPy script needs project structure and scaffold the smallest useful layout |
+| [`/safety`](skills/safety/SKILL.md) | Add dry-run defaults, preflight checks, confirmations, and run receipts around ArcPy writes |
 | [`/project-audit`](skills/project-audit/SKILL.md) | Audit an ArcGIS Pro project for common issues |
 | [`/symbology-compat`](skills/symbology-compat/SKILL.md) | Check if symbology survives KMZ/Google Earth export |
+| [`/kml-author`](skills/kml-author/SKILL.md) | Author clean KML/KMZ with shared styles, NetworkLinks, Regions/LOD, packaging, and validation |
 | [`/schema-smells`](skills/schema-smells/SKILL.md) | Detect data smells and propose constraints |
+| [`/analysis-readiness-check`](skills/analysis-readiness-check/SKILL.md) | Decide if data is ready for a specific analysis (and list blockers) |
+| [`/data-smells-summary`](skills/data-smells-summary/SKILL.md) | Turn diagnostics into a ranked plain-language risk summary |
+| [`/post-run-validation`](skills/post-run-validation/SKILL.md) | Validate outputs after running analysis/scripts (counts, extents, null spikes) |
 | [`/geoparquet-pack`](skills/geoparquet-pack/SKILL.md) | Recommend GeoParquet layout and partitioning |
 | [`/spatial-index`](skills/spatial-index/SKILL.md) | PostGIS/SQL Server index and query optimization |
 | [`/sample-qa-skill`](skills/sample-qa-skill/SKILL.md) | Validate a GIS result with a simple checklist |
 | [`/gis-microapp-ux-spec`](skills/gis-microapp-ux-spec/SKILL.md) | Define and validate the UX contract for GIS demo micro-apps and fast-turn map deliverables |
 | [`/static-map`](skills/static-map/SKILL.md) | Assess and publish relatively static ArcGIS maps as hosted vector tile layers when feature-service capabilities are unnecessary |
+| [`/living-atlas`](skills/living-atlas/SKILL.md) | Find, vet, and safely use Esri Living Atlas layers for production GIS work |
 
 ## Getting Started
 
@@ -75,6 +86,18 @@ arcgispro install            # installs the ArcGIS Pro add-in
 ```
 
 Snap your project in ArcGIS Pro, then your agent can inspect real layers, fields, and connections instead of guessing.
+
+## Worked example: scaffold first, then add safety
+
+A natural ArcPy flow is:
+
+`/arcpy-plan` → `/scaffold` → `/arcpy-script` → `/safety` → `/post-run-validation`
+
+Example:
+1. Start with a one-file parcel update script that buffers schools and appends changed parcels into a shared geodatabase.
+2. Use [`/scaffold`](skills/scaffold/SKILL.md) to move reusable logic into `src/parcels/workflow.py`, keep ArcPy writes in `arcpy_ops.py`, add shared logging, and move paths into `config/settings.yaml`.
+3. Use [`/safety`](skills/safety/SKILL.md) to make the first run a dry-run, require preflight checks for schema, locks, approved workspace, and backups, then block production writes until the user supplies the confirmation phrase.
+4. Finish with [`/post-run-validation`](skills/post-run-validation/SKILL.md) to verify counts, extents, and field sanity after execution.
 
 ## Repo Layout
 

@@ -1,0 +1,34 @@
+id: static-map
+name: static-map
+version: 0.1.0
+scope: public
+description: Assess and publish relatively static, read-only ArcGIS maps as hosted vector tile layers when feature-service capabilities are unnecessary
+inputs:
+- name: task_description
+  type: string
+  required: true
+  description: Description of the static map assessment or publishing task
+- name: project_path
+  type: string
+  required: false
+  description: Path to an ArcGIS Pro APRX project
+- name: map_name
+  type: string
+  required: false
+  description: Map to assess or publish
+- name: execute
+  type: boolean
+  required: false
+  description: Execute packaging and publishing in an authenticated ArcGIS Pro environment; defaults to false
+outputs:
+- name: result
+  type: string
+  description: Preflight report, recommendation, package details, or publishing receipt
+safety:
+  read_only: false
+  notes: Prepare mode is the default. Execute mode requires explicit sharing, authenticated ArcGIS Pro context, and replacement intent for existing items.
+artifacts:
+- .vtpk
+- publishing receipt
+entrypoint: SKILL.md
+

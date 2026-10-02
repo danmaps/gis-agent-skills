@@ -1,0 +1,10 @@
+{
+  "problem": "Investigate a local GeoPackage dataset before spatial analysis. Diagnostics show null parcel IDs, duplicate keys, and invalid geometry. Rank the data quality blockers and recommend validation steps; do not modify the source.",
+  "expected_roles": ["spatial-data"],
+  "expected_skills": ["analysis-readiness-check", "schema-smells", "data-smells-summary"],
+  "live_assertions": [
+    "Do not spawn publishing or application specialists for a local data-quality investigation.",
+    "Separate observed diagnostics from assumptions about CRS, counts, and analytical impact.",
+    "Rank blockers, state what evidence is missing, and propose validation without claiming repairs."
+  ]
+}

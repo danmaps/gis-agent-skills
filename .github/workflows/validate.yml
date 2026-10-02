@@ -18,3 +18,10 @@ jobs:
 
       - name: Validate skills and packs
         run: python tests/validate.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Test optional GIS team workflow
+        run: npm test

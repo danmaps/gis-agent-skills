@@ -87,6 +87,26 @@ arcgispro install            # installs the ArcGIS Pro add-in
 
 Snap your project in ArcGIS Pro, then your agent can inspect real layers, fields, and connections instead of guessing.
 
+## Optional GIS team workflow
+
+Use a **single skill** for a narrow task with known expertise, **`/fleet`** for
+open-ended parallel decomposition, or **`/gis-agent-team`** for a repeatable GIS
+engineering decision with bounded specialists, structured handoffs, conditional
+review, and a workflow receipt.
+
+The optional [GIS team workflow](workflows/gis-agent-team/README.md) adds a
+GitHub Copilot Dynamic Workflow over the existing catalog. It is advisory only,
+selects up to three specialists, and can compare architectures for an
+[800k-asset read-only map](examples/gis-agent-team/800k-assets.json). Use a full
+checkout in a current Copilot CLI/app with experimental workflows enabled; the
+ordinary skill installation remains independent of Copilot.
+
+```text
+/gis-agent-team Compare sensible architectures for a read-only internal map
+of 800,000 utility assets, refreshed monthly for 500 employees in ArcGIS Online.
+Do not publish anything.
+```
+
 ## Worked example: scaffold first, then add safety
 
 A natural ArcPy flow is:
@@ -112,10 +132,12 @@ gis-agent-skills/
 ├── schemas/                     # JSON Schema for skills & packs
 ├── .github/
 │   ├── prompts/                 # reusable prompt files / slash-command style helpers
+│   ├── extensions/              # optional Copilot Dynamic Workflow entrypoint
 │   └── copilot-instructions.md  # repo-level agent guidance
+├── workflows/gis-agent-team/    # portable role contracts and optional adapter
 ├── tests/                       # validation helpers for repo structure
 ├── tools/                       # repo maintenance notes/utilities
-├── examples/                    # currently just a placeholder README
+├── examples/                    # GIS team workflow evaluation fixtures
 ├── PRD.md                       # product direction for the library
 ├── package.json
 └── README.md
@@ -128,9 +150,11 @@ gis-agent-skills/
 - **`packs/*.yaml`** — catalogs that group skills together
 - **`.github/prompts/*.md`** — reusable prompt files for chat-based agent workflows
 - **`.github/copilot-instructions.md`** — base repo instructions for agents working in this repo
+- **`.github/extensions/`** — optional Copilot-specific workflow registration
+- **`workflows/gis-agent-team/`** — bounded role contracts, handoff orchestration, and integration docs
 - **`schemas/`** — JSON schema for validating skill and pack structure
 - **`tests/`** — lightweight repo validation support
-- **`examples/`** — currently minimal; not yet a real gallery of worked examples
+- **`examples/`** — GIS team evaluation fixtures; not a gallery of completed GIS deliverables
 
 ## Contributing
 

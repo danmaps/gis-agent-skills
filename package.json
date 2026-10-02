@@ -2,5 +2,8 @@
   "name": "gis-agent-skills",
   "version": "0.1.0",
   "description": "GIS skills for AI coding agents",
-  "keywords": ["skills", "gis", "arcgis", "copilot"]
+  "keywords": ["skills", "gis", "arcgis", "copilot"],
+  "scripts": {
+    "test": "node --test tests/gis-agent-team.test.mjs"
+  }
 }

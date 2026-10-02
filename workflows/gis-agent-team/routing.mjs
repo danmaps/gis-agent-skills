@@ -4,7 +4,16 @@ const spatial = /\b(data|dataset|assets?|features?|records?|geometry|schema|qual
 const platform = /\b(arcgis online|agol|enterprise|portal|hosted|publish\w*|sharing|authentication|feature service|vector tiles?)\b/i;
 const application = /\b(web map|internal map|viewer|app|application|ux|browser|dashboard|maplibre|experience builder|leaflet)\b/i;
 const staticDelivery = /\b(read.only|static|vector tiles?|monthly|periodic\w*)\b/i;
-const writes = /\b(publish\w*|replac\w*|overwrit\w*|delet\w*|append\w*|edit\w*|updat\w*|production|sharing|authentication)\b/i;
+const writes = /\b(publish\w*|replac\w*|overwrit\w*|delet\w*|append\w*|edit\w*|updat\w*)\b/i;
+const writeTerms = "(?:publish\\w*|replac\\w*|overwrit\\w*|delet\\w*|append\\w*|edit\\w*|updat\\w*|production|sharing|authentication|change\\w*|modify\\w*|make public)";
+const negatedWrites = new RegExp(
+  `\\b(?:without|never|not|no|do not|don't|does not|doesn't|avoid)\\b[^.!?;\\n]{0,40}?\\b${writeTerms}\\b|\\b${writeTerms}\\b[^.!?;\\n]{0,25}\\b(?:(?:is|are|was|were)\\s+)?(?:not|required|needed|necessary|requested|intended|planned|wanted)\\b`,
+  "gi",
+);
+
+function affirmativeText(problem) {
+  return problem.replace(negatedWrites, " ");
+}
 
 export function validateInput(args) {
   if (!args || typeof args !== "object" || Array.isArray(args) ||
@@ -51,7 +60,9 @@ export function skillsForRole(role, problem) {
     add("gis-microapp-ux-spec");
     add("static-map", staticDelivery.test(problem));
   } else throw new Error(`Unknown role: ${role}`);
-  add("safety", writes.test(problem));
+  const activeProblem = affirmativeText(problem);
+  add("safety", writes.test(activeProblem) ||
+    /\b(change|modify|make public)\b[^.!?\n]*\b(sharing|authentication|permissions|access)\b/i.test(activeProblem));
   return [...new Set(skills)];
 }
 
@@ -59,11 +70,12 @@ export function requestReviewReasons(problem) {
   // Planning a production write still requires risk review when execution is
   // explicitly forbidden. Read-only analysis itself never needs approval.
   const reasons = [];
-  if (/\b(production|shared)\b/i.test(problem) &&
-      /\b(append\w*|delet\w*|overwrit\w*|replac\w*|updat\w*|edit\w*|publish\w*)\b/i.test(problem)) {
+  const activeProblem = affirmativeText(problem);
+  if (/\b(production|shared)\b/i.test(activeProblem) &&
+      /\b(append\w*|delet\w*|overwrit\w*|replac\w*|updat\w*|edit\w*|publish\w*)\b/i.test(activeProblem)) {
     reasons.push("production-write");
   }
-  if (/\b(change|modify|make public)\b[^.!?\n]*\b(sharing|authentication|permissions|access)\b/i.test(problem)) {
+  if (/\b(change|modify|make public)\b[^.!?\n]*\b(sharing|authentication|permissions|access)\b/i.test(activeProblem)) {
     reasons.push("publishing-security");
   }
   return reasons;

@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { loadSnapshot, runTeam, renderResult, detectConflicts, roleText, AGENT_NAME } from "../workflows/gis-agent-team/run.mjs";
-import { planRoles, validateInput } from "../workflows/gis-agent-team/routing.mjs";
+import { planRoles, requestReviewReasons, validateInput } from "../workflows/gis-agent-team/routing.mjs";
 import { registerExtension, workflowMeta } from "../workflows/gis-agent-team/copilot.mjs";
 
 const fixture = async name => JSON.parse(await readFile(new URL(`../examples/gis-agent-team/${name}.json`, import.meta.url), "utf8"));
@@ -58,6 +58,7 @@ for (const name of ["800k-assets", "arcpy-automation", "data-quality"]) {
     assert.deepEqual(snapshot.roles.map(r => r.name), input.expected_roles);
     const loaded = new Set(snapshot.assignments.flatMap(a => a.skills));
     input.expected_skills.forEach(id => assert.ok(loaded.has(id), `missing ${id}`));
+    if (name === "800k-assets") assert.ok(!loaded.has("safety"));
     assert.deepEqual(snapshot.unavailable_skills, []);
     assert.ok(snapshot.sources.every(s => /^[a-f0-9]{64}$/.test(s.sha256)));
     assert.ok(snapshot.assignments.every(a => a.files.every(f => f.path.endsWith(".md"))));
@@ -117,6 +118,13 @@ test("ArcPy production plan triggers review from the request even if agents omit
   const result = await runTeam(h.ctx);
   assert.deepEqual(h.calls.map(c => c.options.label), ["spatial-data", "synthesizer", "reviewer"]);
   assert.deepEqual(result.receipt.review_reasons, ["production-write"]);
+});
+
+test("negated read-only write mentions do not load safety guidance or trigger review", async () => {
+  const problem = "Review the read-only production dataset; editing is not required and without publishing anything.";
+  const snapshot = await loadSnapshot(problem);
+  assert.ok(snapshot.assignments.every(assignment => !assignment.skills.includes("safety")));
+  assert.deepEqual(requestReviewReasons(problem), []);
 });
 
 for (const raw of [null, "not JSON", JSON.stringify({ role: "spatial-data" }),

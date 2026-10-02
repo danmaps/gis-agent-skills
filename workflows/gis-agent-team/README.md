@@ -32,8 +32,12 @@ Registration does not prove Dynamic Workflow execution is available for the
 session. An initial local run returned `Dynamic workflows are not available for
 this session`, even with `--experimental`. A zero-agent diagnostic and a subsequent
 800k-asset run succeeded with unused built-in MCP servers disabled. The live run
-on Copilot CLI `1.0.90-0` used all three specialists, the expected four skills,
-synthesis, and conditional review with no agent failures. For an isolated CLI
+on Copilot CLI `1.0.90-0` completed all three specialists, loaded the four expected
+skill entrypoints, and ran synthesis and conditional review with no agent failures.
+The final reviewer blocked an overconfident architecture recommendation and
+reported its unsupported assumptions and resolution of dissent. Model reasoning
+still requires review; a completed run can legitimately return a blocked decision.
+For an isolated CLI
 smoke test, use `--disable-builtin-mcps` as below; these agents need no MCP tools.
 Do not work around host availability by falling back to unbounded agents.
 

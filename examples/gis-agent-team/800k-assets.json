@@ -1,0 +1,11 @@
+{
+  "problem": "We need a read-only internal map for roughly 800,000 utility assets. Editing is not required. Data changes monthly. Around 500 employees will view it. The organization already uses ArcGIS Online. Compare sensible delivery architectures and recommend a path without publishing anything.",
+  "expected_roles": ["spatial-data", "platform-publishing", "application-delivery"],
+  "expected_skills": ["analysis-readiness-check", "static-map", "agol-publish-checklist", "gis-microapp-ux-spec"],
+  "live_assertions": [
+    "Compare feature-service capabilities with read-only delivery, including vector tiles; do not assert a fixed architecture.",
+    "Do not select vector tiles based on feature count alone; interaction requirements can require a feature service.",
+    "State assumptions about filtering, identify, authentication, monthly refresh, and attribute exposure.",
+    "Return an advisory decision record and a receipt with actual roles, skills, and evidence; perform no publishing."
+  ]
+}

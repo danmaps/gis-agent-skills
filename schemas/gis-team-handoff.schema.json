@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GIS team specialist handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["role", "summary", "findings", "constraints", "risks", "recommendations", "assumptions", "unknowns", "skills_used", "confidence", "evidence", "decisions", "review_flags"],
+  "properties": {
+    "role": {"type": "string", "enum": ["spatial-data", "platform-publishing", "application-delivery"]},
+    "summary": {"type": "string", "minLength": 1},
+    "findings": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "constraints": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "risks": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "recommendations": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "assumptions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "unknowns": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "skills_used": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "confidence": {"type": "string", "enum": ["low", "medium", "high"]},
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["source", "claim", "kind"],
+        "properties": {
+          "source": {"type": "string", "minLength": 1},
+          "claim": {"type": "string", "minLength": 1},
+          "kind": {"type": "string", "enum": ["fact", "assumption", "judgment"]}
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["key", "choice", "reason"],
+        "properties": {
+          "key": {"type": "string", "enum": ["delivery", "data-model", "refresh", "authentication", "interaction", "automation"]},
+          "choice": {"type": "string", "minLength": 1},
+          "reason": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "review_flags": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "enum": ["material-conflict", "publishing-security", "production-write", "critical-assumption", "decision-critical-low-confidence"]}
+    }
+  }
+}

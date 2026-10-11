@@ -8,6 +8,7 @@
   <a href="#requirements"><img src=".github/assets/badge-runtime.svg" alt="Core skills require no runtime"></a>
   <a href="#license"><img src=".github/assets/badge-license.svg" alt="MIT license"></a>
   <a href="https://github.com/danmaps/gis-agent-skills/actions/workflows/validate.yml"><img src="https://github.com/danmaps/gis-agent-skills/actions/workflows/validate.yml/badge.svg" alt="Validate skills"></a>
+  <img src=".github/assets/badge-performative.svg" alt="badge list: performative">
 </p>
 
 <p align="center">

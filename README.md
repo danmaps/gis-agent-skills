@@ -3,10 +3,10 @@
 <p align="center"><b>Teach your AI coding agent to think spatially.</b><br>Practical skills for GIS analysis, ArcPy automation, data quality, and map delivery.</p>
 
 <p align="center">
-  <a href="#skills"><img src="https://img.shields.io/badge/GIS_skills-19-243746?style=flat-square" alt="19 GIS skills"></a>
-  <a href="#how-it-works"><img src="https://img.shields.io/badge/format-Markdown_%2B_YAML-243746?style=flat-square" alt="Markdown and YAML"></a>
-  <a href="#requirements"><img src="https://img.shields.io/badge/core-no_runtime_required-243746?style=flat-square" alt="Core skills require no runtime"></a>
-  <a href="#license"><img src="https://img.shields.io/badge/license-MIT-243746?style=flat-square" alt="MIT license"></a>
+  <a href="#skills"><img src=".github/assets/badge-skills.svg" alt="19 GIS skills"></a>
+  <a href="#how-it-works"><img src=".github/assets/badge-format.svg" alt="Markdown and YAML"></a>
+  <a href="#requirements"><img src=".github/assets/badge-runtime.svg" alt="Core skills require no runtime"></a>
+  <a href="#license"><img src=".github/assets/badge-license.svg" alt="MIT license"></a>
   <a href="https://github.com/danmaps/gis-agent-skills/actions/workflows/validate.yml"><img src="https://github.com/danmaps/gis-agent-skills/actions/workflows/validate.yml/badge.svg" alt="Validate skills"></a>
 </p>
 

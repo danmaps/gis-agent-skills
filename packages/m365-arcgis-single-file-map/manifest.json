@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.19/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.19",
+  "version": "1.0.0",
+  "id": "b43fa802-9a31-4ce8-b59d-6490e5138f19",
+  "developer": {
+    "name": "GIS Agent Skills",
+    "websiteUrl": "https://github.com/danmaps/gis-agent-skills",
+    "privacyUrl": "https://github.com/danmaps/gis-agent-skills",
+    "termsOfUseUrl": "https://github.com/danmaps/gis-agent-skills"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "CartoLite",
+    "full": "CartoLite - ArcGIS Single-File Map Creator"
+  },
+  "description": {
+    "short": "Build standalone single-file HTML maps using Leaflet and ArcGIS REST",
+    "full": "Creates self-contained, preview-safe HTML interactive maps using pre-bundled Leaflet with ArcGIS REST feature and tile services."
+  },
+  "accentColor": "#0E7490",
+  "copilotAgents": {
+    "declarativeAgents": [
+      {
+        "id": "cartoLiteAgent",
+        "file": "declarativeAgent.json"
+      }
+    ]
+  }
+}

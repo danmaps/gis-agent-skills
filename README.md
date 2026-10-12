@@ -94,6 +94,7 @@ Slash-command support depends on your agent. You can also ask it to read [`skill
 | [`/symbology-compat`](skills/symbology-compat/SKILL.md) | Check whether symbology survives KMZ and Google Earth export. |
 | [`/kml-author`](skills/kml-author/SKILL.md) | Author and validate KML/KMZ with shared styles, NetworkLinks, Regions/LOD, and packaging. |
 | [`/gis-microapp-ux-spec`](skills/gis-microapp-ux-spec/SKILL.md) | Define and validate the UX contract for small GIS apps and map deliverables. |
+| [`/arcgis-single-file-map`](skills/arcgis-single-file-map/SKILL.md) | Build standalone single-file HTML map viewers for in-app sandboxes and browsers with zero build steps. |
 
 ### Storage and query performance
 
@@ -103,6 +104,14 @@ Slash-command support depends on your agent. You can also ask it to read [`skill
 | [`/spatial-index`](skills/spatial-index/SKILL.md) | Recommend spatial indexing and query optimization for PostGIS and SQL Server. |
 
 The [public-core catalog](packs/public-core.yaml) lists every skill in the library.
+
+### GitHub Copilot
+
+The combined ArcGIS Online and Living Atlas search skill is available at
+`.github/skills/agol-search/SKILL.md`, which Copilot can discover from the repository.
+To add it to another repository, copy the `agol-search` skill folder into that
+repository's `.github/skills/` directory. For personal use, copy it to
+`~/.copilot/skills/agol-search/`.
 
 ## Install
 

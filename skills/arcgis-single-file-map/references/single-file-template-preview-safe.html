@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Standalone Single-File Map</title>
+  <style>
+    html, body, #map {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background: #18181b;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .floating-header {
+      position: absolute;
+      top: 15px;
+      left: 50px;
+      z-index: 1000;
+      background: rgba(24, 24, 27, 0.92);
+      backdrop-filter: blur(8px);
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      max-width: 360px;
+      color: #f4f4f5;
+    }
+    .floating-header h1 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 4px 0;
+      color: #ffffff;
+    }
+    .floating-header p {
+      font-size: 12px;
+      margin: 0;
+      color: #a1a1aa;
+      line-height: 1.4;
+    }
+    .notice-banner {
+      display: none;
+      margin-top: 8px;
+      padding: 6px 10px;
+      background: #27272a;
+      border-left: 3px solid #3b82f6;
+      color: #93c5fd;
+      font-size: 11px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-header">
+    <h1 id="mapTitle">Interactive Map Viewer</h1>
+    <p id="mapDescription">Self-contained standalone single-file map</p>
+    <div id="noticeBanner" class="notice-banner"></div>
+  </div>
+  <div id="map"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Check if Leaflet is available in host environment
+      if (typeof L === "undefined") {
+        const banner = document.getElementById("noticeBanner");
+        banner.style.display = "block";
+        banner.textContent = "Leaflet runtime not found. Opening in a full browser window will load external dependencies.";
+        return;
+      }
+
+      const map = L.map("map", {
+        zoomControl: false
+      }).setView([34.0522, -118.2437], 10);
+
+      L.control.zoom({ position: "top-left" }).addTo(map);
+
+      // CartoDB / OSM tiles
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+        maxZoom: 19
+      }).addTo(map);
+    });
+  </script>
+</body>
+</html>

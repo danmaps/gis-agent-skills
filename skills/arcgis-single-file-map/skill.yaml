@@ -1,0 +1,32 @@
+id: arcgis-single-file-map
+name: arcgis-single-file-map
+version: 0.1.0
+scope: public
+description: Build standalone single-file HTML map viewers for in-app sandboxes and browsers using Leaflet or the ArcGIS Maps SDK
+inputs:
+- name: task_description
+  type: string
+  required: true
+  description: Description of the map visualization, layers, and interactive behavior
+- name: data_source
+  type: string
+  required: false
+  description: ArcGIS Online WebMap ID, Feature Layer URL, GeoJSON, or inline spatial data
+- name: title
+  type: string
+  required: false
+  description: Map title displayed in the UI header
+- name: output_path
+  type: string
+  required: false
+  description: Destination path for the generated HTML file (default map.html)
+outputs:
+- name: result
+  type: string
+  description: Summary of generated map, layers, widgets, and file path
+safety:
+  read_only: false
+  notes: Generates standalone HTML files on local disk. Does not modify remote authoritative layers or embed credentials.
+artifacts:
+- map.html
+entrypoint: SKILL.md

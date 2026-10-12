@@ -147,6 +147,16 @@ referenced_names = {Path(ref).name for ref in all_pack_skill_refs}
 for name in sorted(skill_folder_names - referenced_names):
     error(f"skills/{name}/ exists but is not referenced in any pack")
 
+# ── 7. Copilot skill package consistency ───────────────────────
+copilot_agol_skill = REPO_ROOT / ".github" / "skills" / "agol-search" / "SKILL.md"
+source_agol_skill = SKILLS_DIR / "agol-search" / "SKILL.md"
+if not copilot_agol_skill.exists():
+    error(".github/skills/agol-search/SKILL.md is missing")
+elif copilot_agol_skill.read_text(encoding="utf-8") != source_agol_skill.read_text(
+    encoding="utf-8"
+):
+    error(".github/skills/agol-search/SKILL.md is out of sync with skills/agol-search/SKILL.md")
+
 # ── Summary ────────────────────────────────────────────────────
 print()
 if errors:

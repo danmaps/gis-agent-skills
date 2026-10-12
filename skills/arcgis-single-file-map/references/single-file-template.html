@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>ArcGIS Maps SDK Single File Map</title>
+  <!-- ArcGIS Maps SDK for JavaScript CSS -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/light/main.css" />
+  <!-- ArcGIS Maps SDK for JavaScript Core API -->
+  <script src="https://js.arcgis.com/4.32/"></script>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .map-header {
+      position: absolute;
+      top: 15px;
+      left: 60px;
+      z-index: 99;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      max-width: 380px;
+    }
+    .map-header h1 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 4px 0;
+      color: #151515;
+    }
+    .map-header p {
+      font-size: 12px;
+      margin: 0;
+      color: #6e6e6e;
+      line-height: 1.4;
+    }
+    .error-banner {
+      display: none;
+      margin-top: 8px;
+      padding: 6px 10px;
+      background: #fde8e8;
+      border-left: 3px solid #e02424;
+      color: #9b1c1c;
+      font-size: 11px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="map-header">
+    <h1 id="mapTitle">Interactive Map Viewer</h1>
+    <p id="mapDescription">Loaded with ArcGIS Maps SDK for JavaScript v4.32</p>
+    <div id="errorBanner" class="error-banner"></div>
+  </div>
+  <div id="viewDiv"></div>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/widgets/Home",
+      "esri/widgets/ScaleBar",
+      "esri/widgets/Legend",
+      "esri/widgets/Expand"
+    ], function(Map, MapView, Home, ScaleBar, Legend, Expand) {
+      const map = new Map({
+        basemap: "arcgis/topographic"
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [-118.2437, 34.0522],
+        zoom: 10
+      });
+
+      // Navigation & Measurement widgets
+      const homeWidget = new Home({ view: view });
+      view.ui.add(homeWidget, "top-left");
+
+      const scaleBar = new ScaleBar({ view: view, unit: "dual" });
+      view.ui.add(scaleBar, "bottom-left");
+
+      // Collapsible Legend widget
+      const legend = new Legend({ view: view });
+      const legendExpand = new Expand({
+        view: view,
+        content: legend,
+        expandTooltip: "Show Legend",
+        expanded: false
+      });
+      view.ui.add(legendExpand, "top-right");
+
+      // Handle loading errors gracefully
+      view.when().catch(function(error) {
+        const banner = document.getElementById("errorBanner");
+        banner.textContent = "Error loading map view: " + error.message;
+        banner.style.display = "block";
+      });
+    });
+  </script>
+</body>
+</html>

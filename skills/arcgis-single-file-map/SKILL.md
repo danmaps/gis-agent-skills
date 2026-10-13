@@ -1,185 +1,67 @@
 ---
-name: cartolite
-description: Build standalone, single-file HTML map viewers with zero build steps, using sandbox-safe Leaflet with ArcGIS REST layers or the ArcGIS Maps SDK.
+name: arcgis-single-file-map
+description: Build a standalone single-file HTML map for SharePoint/Copilot HTML embeds and plain browsers, using the dynamically loaded ArcGIS Maps SDK 5.x with a Leaflet fallback and ArcGIS REST data.
 ---
 
-# CartoLite: Standalone Single-File Map Maker
+# ArcGIS Single-File Map
 
-Build standalone, self-contained single `.html` file map viewers that open cleanly both in **sandboxed in-app previewers (such as Microsoft Copilot / Teams artifact previews, Claude artifacts, or WebViews)** and in standard browsers with zero build steps or npm dependencies.
+Produce one self-contained `.html` file, no build step, that works in:
 
-## ⚠️ Sandbox & Preview Environment Compatibility
+1. **SharePoint / Microsoft 365 HTML embeds** (and Copilot-generated previews where the host allows it)
+2. **Any browser**
 
-In-app HTML previewers (such as Microsoft 365 Copilot artifact previews) run inside an isolated iframe with a strict security sandbox and pre-bundled libraries:
-- **Pre-bundled / Supported map library**: `leaflet` and `leaflet.markercluster` are bundled and available in the environment.
-- **External CDNs blocked**: In-app previewers block arbitrary external `<script>` and `<link>` CDNs (such as `js.arcgis.com`) and do not provide AMD `require()`. Attempting to load `js.arcgis.com` inside an in-app previewer produces:
-  `CdnAliasUnresolved - Unresolved CDN references`
-  `Runtime error: Uncaught ReferenceError: require is not defined`
-- **Core Rule**:
-  1. **Default to Leaflet** (`L.map`) for standalone previews and artifacts. Leaflet is pre-bundled in sandboxes and easily connects to ArcGIS Online REST endpoints (Esri tiles, FeatureServer queries, and GeoJSON).
-  2. If the user specifically asks for the native ArcGIS Maps SDK (`@arcgis/core` or `js.arcgis.com`), provide the standalone HTML file for local download (`file:///` or browser launch) and explicitly state that the in-app previewer blocks external CDNs.
+Use `references/single-file-template.html`. Edit only its `CONFIG` block.
 
-## Architecture with Sandbox-Safe Leaflet
+## SDK version (important)
 
-- **Zero External CDN Dependencies**: Works with the bundled `leaflet` library.
-- **ArcGIS REST Service Integration**:
-  - **ArcGIS Feature Services**: Query features with `.../FeatureServer/0/query?where=1%3D1&outFields=*&f=geojson` and render using `L.geoJSON()`.
-  - **Tile / Basemap Services**: Connect to ArcGIS World Topo, Gray Canvas, or OpenStreetMap tile endpoints directly via `L.tileLayer()`.
-- **Responsive Layout**: Full viewport (`width: 100%; height: 100vh; margin: 0; padding: 0;`).
-- **Overlay UI**: Floating card for title, subtitle, and legend in clean modern CSS.
+- **Prefer the latest ArcGIS Maps SDK 5.x** (template pins `SDK_VERSION = "5.1"`, the latest stable; `5.2` currently serves a pre-release build whose modules fail to load). 4.34 still works but logs deprecation errors for every widget (Search, Home, ScaleBar, Legend, Expand) and is the last AMD release; do not use it.
+- 5.x is **ES-module only: there is no `require()`**. Load `https://js.arcgis.com/5.x/` as `type="module"`, then use the `$arcgis` global: `await $arcgis.import(["@arcgis/core/Map.js", ...])`.
+- Never mix a module-type SDK tag with `require([...])` or use 4.x-style `esri/Map` module ids.
+- The template injects the module script at runtime (`script.type = "module"`), waits for `onload`, then calls `$arcgis.import`. This is the pattern that survives SharePoint HTML embeds.
+- **Avoid deprecated widgets** (`Search`, `Home`, `ScaleBar`, `Legend`, `Expand`). Use the `<arcgis-search>`, `<arcgis-legend>`, etc. components if UI is needed (they need the map-components script from the same CDN), or keep the UI to the built-in zoom control and the HTML legend card.
+- Leaflet as a pre-bundled global fails in SharePoint (`This preview blocks the map library`), so it is only a fallback.
+## Rules
 
-## Code Sample: Complete Sandbox-Ready Map
+- **SDK first, Leaflet second, built-in offline map last.** SharePoint/Copilot embeds run in an `about:srcdoc` iframe with an enforced CSP (`script-src 'unsafe-inline'`, `style-src 'unsafe-inline'`, `img-src data: blob:` plus a few hosts), so script CDNs, external CSS and tile images are all blocked. The built-in fallback needs no network: it draws the embedded `references/basemap-offline.json` (world + US state outlines) and `inlineGeoJSON` as SVG with pan/zoom/popups. **For embed targets, always embed an `inlineGeoJSON` snapshot and paste the contents of `basemap-offline.json` over `const OFFLINE_BASEMAP = null;`** (~50 KB).
+- **Time out** script loads (15 s SDK, 8 s Leaflet) so failure is visible.
+- **Size to the frame**: `html, body { height: 100% }` and an absolutely positioned `#map`; avoid `100vh`.
+- **Public data only.** Never embed tokens, API keys, or credentials; do not point at secured or internal services.
+- **Passive page.** No `window.top`/`parent` access, `alert`, popups, `target="_blank"`, or form posts.
+- **Safe popups.** The SDK popup template and Leaflet fallback never inject attribute values with `innerHTML`.
+- **Snapshot for resilience.** For small results, also embed `inlineGeoJSON` so the Leaflet fallback and blocked-network cases still show data.
+- **Compact UI.** One title card, one legend row, `pointer-events: none` on the card.
+- Hosts differ by tenant CSP. State that the result was validated against the user's host only if it was; otherwise ask them to test in the target page.
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>California Wildfires - CartoLite</title>
-  <!-- In in-app preview sandboxes (like M365 Copilot / Claude artifacts), Leaflet is already pre-bundled!
-       No external <link> or <script> tags needed. For local browser execution, Leaflet CDN links can be added. -->
-  <style>
-    html, body, #map {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      background: #121212;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    .floating-header {
-      position: absolute;
-      top: 15px;
-      left: 50px;
-      z-index: 1000;
-      background: rgba(24, 24, 27, 0.9);
-      backdrop-filter: blur(8px);
-      padding: 12px 18px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-      max-width: 360px;
-      color: #f4f4f5;
-    }
-    .floating-header h1 {
-      font-size: 15px;
-      font-weight: 600;
-      margin: 0 0 4px 0;
-      color: #ffffff;
-    }
-    .floating-header p {
-      font-size: 12px;
-      margin: 0;
-      color: #a1a1aa;
-      line-height: 1.4;
-    }
-    .legend-box {
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      color: #e4e4e7;
-    }
-    .legend-color {
-      width: 14px;
-      height: 14px;
-      background: #ef4444;
-      border: 1px solid #b91c1c;
-      border-radius: 3px;
-    }
-  </style>
-</head>
-<body>
-  <div class="floating-header">
-    <h1>California Wildfires (Active Perimeters)</h1>
-    <p>Authoritative incident data via ArcGIS REST</p>
-    <div class="legend-box">
-      <span class="legend-color"></span> Active Fire Perimeter
-    </div>
-  </div>
-  <div id="map"></div>
+## ArcGIS data patterns
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // 1. Initialize Leaflet Map
-      const map = L.map("map", {
-        zoomControl: false
-      }).setView([37.0, -120.0], 6);
+- `featureUrl`: public FeatureServer layer URL (e.g. `.../FeatureServer/0`); the SDK uses `FeatureLayer` directly and zooms to the data.
+- The Leaflet fallback queries `<layer>/query?where=1%3D1&outFields=*&resultRecordCount=2000&f=geojson`. Check `exceededTransferLimit` and tell the user if truncated.
+- Change `basemap` to any ArcGIS basemap id (`topo-vector`, `streets-vector`, `gray-vector`, `satellite`).
 
-      L.control.zoom({ position: "top-left" }).addTo(map);
+## Workflow
 
-      // 2. Basemap (CartoDB Dark Matter / OSM / Esri TileLayer)
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-        maxZoom: 19
-      }).addTo(map);
-
-      // 3. Query ArcGIS REST FeatureServer directly as GeoJSON
-      const agolEndpoint = "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer/0/query?where=1%3D1&outFields=IncidentName,DailyAcres,PercentContained&f=geojson";
-
-      fetch(agolEndpoint)
-        .then(res => res.json())
-        .then(data => {
-          L.geoJSON(data, {
-            style: {
-              color: "#ef4444",
-              weight: 2,
-              fillColor: "#ef4444",
-              fillOpacity: 0.35
-            },
-            onEachFeature: function(feature, layer) {
-              const props = feature.properties || {};
-              // Construct popup with textContent to safely prevent XSS from unescaped attribute text
-              const popupContainer = document.createElement("div");
-              popupContainer.style.fontFamily = "sans-serif";
-              popupContainer.style.fontSize = "13px";
-
-              const titleEl = document.createElement("strong");
-              titleEl.style.fontSize = "14px";
-              titleEl.style.color = "#111";
-              titleEl.textContent = props.IncidentName || "Wildfire Incident";
-              popupContainer.appendChild(titleEl);
-
-              const detailsEl = document.createElement("div");
-              detailsEl.style.marginTop = "6px";
-              detailsEl.style.color = "#444";
-              
-              const acres = props.DailyAcres ? Number(props.DailyAcres).toLocaleString() : "N/A";
-              const contained = props.PercentContained !== undefined ? props.PercentContained + "%" : "Unknown";
-              detailsEl.textContent = `Acres: ${acres} | Containment: ${contained}`;
-              popupContainer.appendChild(detailsEl);
-
-              layer.bindPopup(popupContainer);
-            }
-          }).addTo(map);
-        })
-        .catch(err => {
-          console.warn("Could not query feature service:", err);
-        });
-    });
-  </script>
-</body>
-</html>
-```
+1. Copy `references/single-file-template.html`.
+2. Edit `CONFIG`: title, subtitle, `center` (`[lon, lat]`), zoom, `featureUrl`, color, `popupFields`, optional `inlineGeoJSON`.
+3. Save as `output_path` (default `map.html`).
+4. Tell the user how to embed it (SharePoint HTML/Embed web part, or upload and open) and what to check.
 
 ## Inputs
 
-- `task_description` (string): Description of the map visualization, layers, and interactive behavior
-- `data_source` (string or object): ArcGIS REST FeatureServer URL, GeoJSON, or inline features
-- `title` (string, optional): Map title displayed in the header overlay
-- `center` (array of numbers, optional): `[latitude, longitude]`
-- `zoom` (number, optional): Initial zoom level (1–19)
-- `theme` (string, optional: `dark`, `light`)
+- `task_description` (string): Map, layers, and interactions wanted
+- `data_source` (string or object): Public ArcGIS REST FeatureServer URL, GeoJSON, or inline features
+- `title` (string, optional)
+- `center` (array, optional): `[longitude, latitude]`
+- `zoom` (number, optional)
+- `output_path` (string, optional): default `map.html`
 
 ## Output
 
-Return:
-- A standalone, single-file `.html` map document compatible with in-app preview environments.
-- Summary of included layers, styling, and basemap.
-- Confirmation that no external unauthorized CDNs or private tokens were used.
+- The standalone `.html` file.
+- Short summary of layers, symbology, and basemap.
+- Which rendering path was verified (SDK, Leaflet fallback, offline map, or none) and any truncation.
+- Confirmation that no credentials were used.
 
 ## Example
 
-**User:** "Create a single-file map showing active California wildfires with popup stats."
-**Output:** Generates `wildfires.html` using the template above, ready to view in the in-app preview window without library or CDN errors.
+**User:** "Make a map of active California wildfires for our SharePoint page."
+**Result:** `wildfires.html` from the template with `featureUrl` set to the public perimeters layer; renders via the ArcGIS SDK, falls back to Leaflet if blocked.

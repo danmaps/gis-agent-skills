@@ -4,6 +4,7 @@
   "description": "GIS skills for AI coding agents",
   "keywords": ["skills", "gis", "arcgis", "copilot"],
   "scripts": {
+    "build": "python tools/build-zips.py",
     "test": "node --test tests/gis-agent-team.test.mjs"
   }
 }

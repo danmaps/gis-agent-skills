@@ -2,7 +2,7 @@ id: arcgis-single-file-map
 name: arcgis-single-file-map
 version: 0.1.0
 scope: public
-description: Build standalone single-file HTML map viewers for in-app sandboxes and browsers for SharePoint embeds and browsers using the dynamically loaded ArcGIS Maps SDK with a Leaflet fallback
+description: Build a polished standalone HTML map from ArcGIS REST or GeoJSON data, designed to be double-clicked and opened locally, using ArcGIS Maps SDK 5.x web components
 inputs:
 - name: task_description
   type: string

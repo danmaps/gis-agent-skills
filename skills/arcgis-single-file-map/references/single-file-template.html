@@ -3,282 +3,139 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Embedded Map</title>
+  <title>Map title</title>
+  <script type="module" src="https://js.arcgis.com/5.1/"></script>
+  <script type="module" src="https://js.arcgis.com/5.1/map-components/"></script>
   <style>
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #e5e7eb; }
-    #map { position: absolute; inset: 0; }
-    .card {
-      position: absolute; top: 10px; left: 54px; right: 10px; z-index: 1000; max-width: 340px;
-      padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,.94); color: #18181b;
-      box-shadow: 0 2px 10px rgba(0,0,0,.25); pointer-events: none;
+    html, body { margin: 0; height: 100%; font-family: "Segoe UI", system-ui, sans-serif; background: #e5e7eb; }
+    arcgis-map { position: absolute; inset: 0; }
+    .title-card {
+      position: absolute; z-index: 5; top: 14px; left: 64px; max-width: min(380px, calc(100vw - 100px));
+      padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,.95); color: #1f2937;
+      box-shadow: 0 4px 16px rgba(0,0,0,.2); pointer-events: none;
     }
-    .card h1 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
-    .card p { margin: 0; font-size: 12px; color: #52525b; line-height: 1.35; }
-    .legend { display: none; margin-top: 6px; font-size: 11px; align-items: center; gap: 6px; }
-    .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
-    .notice { display: none; margin-top: 6px; padding: 5px 8px; font-size: 11px; border-left: 3px solid #d97706; background: #fef3c7; color: #78350f; border-radius: 3px; }
+    .title-card h1 { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+    .title-card p { margin: 3px 0 0; font-size: 12.5px; color: #4b5563; line-height: 1.4; }
+    .title-card .meta { margin-top: 6px; font-size: 11.5px; color: #6b7280; }
+    #status {
+      position: absolute; z-index: 6; left: 50%; bottom: 24px; transform: translateX(-50%);
+      padding: 8px 14px; border-radius: 8px; font-size: 13px; background: #1f2937; color: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,.3); display: none; max-width: 80vw;
+    }
+    #status.error { background: #991b1b; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1 id="title">Map title</h1>
-    <p id="subtitle">Short description</p>
-    <div class="legend" id="legend"><i id="swatch"></i><span id="legendLabel"></span></div>
-    <div class="notice" id="notice"></div>
-  </div>
-  <div id="map"></div>
+  <arcgis-map id="view">
+    <arcgis-zoom slot="top-left"></arcgis-zoom>
+    <arcgis-home slot="top-left"></arcgis-home>
+    <arcgis-search slot="top-right"></arcgis-search>
+    <arcgis-legend slot="bottom-left"></arcgis-legend>
+    <arcgis-scale-bar slot="bottom-left" unit="dual"></arcgis-scale-bar>
+    <arcgis-basemap-toggle slot="bottom-right"></arcgis-basemap-toggle>
+  </arcgis-map>
 
-  <script>
+  <div class="title-card">
+    <h1 id="title"></h1>
+    <p id="subtitle"></p>
+    <div class="meta" id="meta"></div>
+  </div>
+  <div id="status"></div>
+
+  <script type="module">
     // ---- Edit this block only ----
     const CONFIG = {
       title: "Map title",
-      subtitle: "Short description",
-      center: [-118.25, 34.05],   // [longitude, latitude]
+      subtitle: "Short description of what the map shows",
+      basemap: "topo-vector",          // streets-vector, gray-vector, dark-gray-vector, satellite, hybrid, osm
+      altBasemap: "satellite",         // basemap toggle target; null removes the toggle
+      center: [-118.25, 34.05],        // [longitude, latitude], used when no layer provides an extent
       zoom: 9,
-      basemap: "topo-vector",     // ArcGIS basemap id; Leaflet fallback uses Esri World Street Map tiles
-      featureUrl: "",             // public FeatureServer layer URL (no tokens)
-      legendLabel: "Features",
-      color: "#2563eb",
-      popupFields: [],            // e.g. ["Name", "Status"]; empty = all fields
-      inlineGeoJSON: null         // used by the Leaflet fallback and when featureUrl is empty
+      zoomToData: true,                // fit the view to the first layer with features
+      search: true,
+      layers: [
+        {
+          title: "Features",
+          url: "",                     // public FeatureServer/MapServer layer URL, e.g. .../FeatureServer/0
+          // geojson: null,            // alternative to url: GeoJSON URL (https or relative) or inline object
+          where: "1=1",
+          color: "#2563eb",            // used when colorBy is empty
+          colorBy: "",                 // optional field name -> unique-value symbols + legend
+          size: 8,                     // marker size for points
+          popupFields: [],             // e.g. ["Name", "Status"]; empty = all fields
+          maxFeatures: 5000
+        }
+      ]
     };
     // ------------------------------
 
-    // 5.x is ES-module only (no require()); it exposes the $arcgis global once the module script loads.
-    const SDK_VERSION = "5.1"; // latest stable 5.x; "5.2" currently resolves to a pre-release build
     const $ = id => document.getElementById(id);
-    const notice = msg => { const n = $("notice"); n.textContent = msg; n.style.display = "block"; };
+    const status = (msg, isError) => {
+      const s = $("status"); s.textContent = msg; s.className = isError ? "error" : "";
+      s.style.display = msg ? "block" : "none";
+    };
 
-    function addScript(src, type) {
-      return new Promise((resolve, reject) => {
-        const s = document.createElement("script");
-        if (type) s.type = type;
-        s.src = src; s.onload = resolve; s.onerror = () => reject(new Error("blocked: " + src));
-        document.head.appendChild(s);
-      });
-    }
-    function addCss(href) {
-      const l = document.createElement("link");
-      l.rel = "stylesheet"; l.href = href; document.head.appendChild(l);
-    }
-    const withTimeout = (p, ms) => Promise.race([p, new Promise((_, r) => setTimeout(() => r(new Error("timeout")), ms))]);
+    document.title = CONFIG.title;
+    $("title").textContent = CONFIG.title;
+    $("subtitle").textContent = CONFIG.subtitle;
 
-    // Primary: ArcGIS Maps SDK, loaded dynamically (ES-module entry injected at runtime).
-    async function sdkMap() {
-      await withTimeout(addScript(`https://js.arcgis.com/${SDK_VERSION}/`, "module"), 15000);
-      if (!window.$arcgis) throw new Error("$arcgis undefined");
-      const [EsriMap, MapView, FeatureLayer, GeoJSONLayer] = await withTimeout(
-        $arcgis.import(["@arcgis/core/Map.js", "@arcgis/core/views/MapView.js", "@arcgis/core/layers/FeatureLayer.js", "@arcgis/core/layers/GeoJSONLayer.js"]), 15000);
+    const viewEl = $("view");
+    viewEl.basemap = CONFIG.basemap;
+    viewEl.center = CONFIG.center;
+    viewEl.zoom = CONFIG.zoom;
+    const toggle = viewEl.querySelector("arcgis-basemap-toggle");
+    if (CONFIG.altBasemap) toggle.nextBasemap = CONFIG.altBasemap; else toggle.remove();
+    if (!CONFIG.search) viewEl.querySelector("arcgis-search").remove();
 
-      const renderer = {
-        type: "simple",
-        symbol: { type: "simple-marker", size: 8, color: CONFIG.color, outline: { color: "#fff", width: 1 } }
-      };
+    const symbolFor = (type, color, size) => {
+      if (type === "point" || type === "multipoint") return { type: "simple-marker", size, color, outline: { color: "#ffffff", width: 1 } };
+      if (type === "polyline") return { type: "simple-line", color, width: 2 };
+      return { type: "simple-fill", color: color + "55", outline: { color, width: 1.5 } };
+    };
+
+    async function addLayer(cfg, view, m) {
       const popupTemplate = {
-        title: CONFIG.title,
-        content: [{ type: "fields", fieldInfos: (CONFIG.popupFields.length ? CONFIG.popupFields : ["*"]).map(f => ({ fieldName: f })) }]
+        title: cfg.title,
+        content: [{ type: "fields", fieldInfos: (cfg.popupFields && cfg.popupFields.length ? cfg.popupFields : ["*"]).map(fieldName => ({ fieldName })) }]
       };
-      const map = new EsriMap({ basemap: CONFIG.basemap });
-      let layer = null;
-      if (CONFIG.featureUrl) {
-        layer = new FeatureLayer({ url: CONFIG.featureUrl, outFields: ["*"], popupTemplate });
-      } else if (CONFIG.inlineGeoJSON) {
-        const url = URL.createObjectURL(new Blob([JSON.stringify(CONFIG.inlineGeoJSON)], { type: "application/json" }));
-        layer = new GeoJSONLayer({ url, popupTemplate });
+      let layer;
+      if (cfg.geojson) {
+        const url = typeof cfg.geojson === "string" ? cfg.geojson
+          : URL.createObjectURL(new Blob([JSON.stringify(cfg.geojson)], { type: "application/json" }));
+        layer = new m.GeoJSONLayer({ url, title: cfg.title, popupTemplate });
+      } else if (cfg.url) {
+        layer = new m.FeatureLayer({ url: cfg.url, title: cfg.title, outFields: ["*"], definitionExpression: cfg.where || "1=1", popupTemplate });
+      } else return null;
+      viewEl.map.add(layer);
+      await layer.load();
+      layer.renderer = { type: "simple", label: cfg.title, symbol: symbolFor(layer.geometryType, cfg.color, cfg.size || 8) };
+      if (cfg.colorBy) {
+        try { layer.renderer = (await m.typeRenderer.createRenderer({ layer, view, field: cfg.colorBy })).renderer; }
+        catch (e) { console.warn("colorBy failed, using a single color", e); }
       }
-      if (layer) map.add(layer);
-      const view = new MapView({ container: "map", map, center: CONFIG.center, zoom: CONFIG.zoom, ui: { components: ["zoom"] } });
-      await withTimeout(view.when(), 15000);
-      if (layer) {
-        try {
-          await layer.load();
-          if (layer.geometryType === "point") layer.renderer = renderer;
-          const ext = await layer.queryExtent();
-          if (ext && ext.extent) view.goTo(ext.extent.expand(1.2)).catch(() => {});
-        } catch (e) { notice("Layer could not load: " + (e.message || e)); }
-      }
+      return layer;
     }
 
-    // Fallback: Leaflet (host-bundled global L, or unpkg when the host allows it).
-    async function leafletMap() {
-      if (!window.L) {
-        addCss("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css");
-        await withTimeout(addScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"), 8000);
+    try {
+      status("Loading map...");
+      await viewEl.componentOnReady();
+      const [FeatureLayer, GeoJSONLayer, typeRenderer] = await $arcgis.import([
+        "@arcgis/core/layers/FeatureLayer.js", "@arcgis/core/layers/GeoJSONLayer.js", "@arcgis/core/smartMapping/renderers/type.js"
+      ]);
+      const loaded = [];
+      for (const cfg of CONFIG.layers) {
+        try { const l = await addLayer(cfg, viewEl.view, { FeatureLayer, GeoJSONLayer, typeRenderer }); if (l) loaded.push(l); }
+        catch (e) { console.error(e); status('Layer "' + cfg.title + '" failed to load: ' + (e.message || e), true); }
       }
-      const map = L.map("map", { zoomControl: true }).setView([CONFIG.center[1], CONFIG.center[0]], CONFIG.zoom);
-      L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", { attribution: "Tiles &copy; Esri", maxZoom: 19 }).addTo(map);
-      if (window.ResizeObserver) new ResizeObserver(() => map.invalidateSize()).observe($("map"));
-      let data = null;
-      if (CONFIG.featureUrl) {
-        try {
-          const res = await fetch(CONFIG.featureUrl.replace(/\/?$/, "/query?where=1%3D1&outFields=*&resultRecordCount=2000&f=geojson"));
-          if (!res.ok) throw new Error(res.status);
-          data = await res.json();
-        } catch (e) { notice("Live data blocked here" + (CONFIG.inlineGeoJSON ? "; showing a static snapshot." : ".")); }
+      if (CONFIG.zoomToData && loaded.length) {
+        const q = await loaded[0].queryExtent();
+        if (q && q.count) { await viewEl.goTo(q.extent.expand(1.2)).catch(() => {}); $("meta").textContent = q.count.toLocaleString() + " features"; }
       }
-      data = data || CONFIG.inlineGeoJSON;
-      if (!data) return;
-      const layer = L.geoJSON(data, {
-        style: { color: CONFIG.color, weight: 2, fillColor: CONFIG.color, fillOpacity: 0.3 },
-        pointToLayer: (f, ll) => L.circleMarker(ll, { radius: 6, color: CONFIG.color, fillColor: CONFIG.color, fillOpacity: 0.7 }),
-        onEachFeature: (f, l) => {
-          const props = f.properties || {}, box = document.createElement("div");
-          (CONFIG.popupFields.length ? CONFIG.popupFields : Object.keys(props).slice(0, 6)).forEach(k => {
-            const row = document.createElement("div"), b = document.createElement("strong");
-            b.textContent = k + ": "; row.appendChild(b);
-            row.appendChild(document.createTextNode(props[k] == null ? "" : String(props[k])));
-            box.appendChild(row);
-          });
-          l.bindPopup(box);
-        }
-      }).addTo(map);
-      if (layer.getBounds().isValid()) map.fitBounds(layer.getBounds(), { padding: [30, 30], maxZoom: 14 });
+      if (!document.querySelector("#status.error")) status("");
+    } catch (e) {
+      console.error(e);
+      status("Could not load the ArcGIS Maps SDK from js.arcgis.com. Check your internet connection or network policy.", true);
     }
-
-    // Offline basemap for hosts that block scripts AND external images (e.g. SharePoint/Copilot embeds):
-    // replace null with the contents of references/basemap-offline.json ({w: world polygons, s: US state polygons}).
-    const OFFLINE_BASEMAP = null;
-
-    // Last resort: no libraries and no network. Draws the embedded basemap and features as SVG.
-    // Drag to pan, wheel or +/- to zoom.
-    function tileMap(data) {
-      const NS = "http://www.w3.org/2000/svg", root = $("map");
-      root.innerHTML = ""; root.style.cssText += ";overflow:hidden;background:#cfe3f5;touch-action:none;cursor:grab";
-      const svg = document.createElementNS(NS, "svg");
-      svg.style.cssText = "position:absolute;inset:0;width:100%;height:100%;overflow:hidden";
-      const pop = document.createElement("div");
-      pop.style.cssText = "position:absolute;z-index:5;display:none;max-width:240px;padding:6px 8px;background:#fff;color:#18181b;font-size:12px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.3)";
-      const ui = document.createElement("div");
-      ui.style.cssText = "position:absolute;left:10px;top:10px;z-index:6;display:flex;flex-direction:column;gap:2px";
-      const attr = document.createElement("div");
-      attr.style.cssText = "position:absolute;right:4px;bottom:2px;z-index:6;font-size:10px;background:rgba(255,255,255,.7);padding:0 4px";
-      attr.textContent = OFFLINE_BASEMAP ? "Basemap: Natural Earth (simplified)" : "";
-      root.append(svg, pop, ui, attr);
-
-      const feats = [];
-      const walk = (g, props) => {
-        if (!g) return;
-        if (g.type === "GeometryCollection") return g.geometries.forEach(x => walk(x, props));
-        const c = g.coordinates;
-        if (g.type === "Point") feats.push({ k: "pt", p: [[c]], props });
-        else if (g.type === "MultiPoint") c.forEach(q => feats.push({ k: "pt", p: [[q]], props }));
-        else if (g.type === "LineString") feats.push({ k: "ln", p: [c], props });
-        else if (g.type === "MultiLineString") feats.push({ k: "ln", p: c, props });
-        else if (g.type === "Polygon") feats.push({ k: "pg", p: c, props });
-        else if (g.type === "MultiPolygon") c.forEach(poly => feats.push({ k: "pg", p: poly, props }));
-      };
-      (data.type === "FeatureCollection" ? data.features : [data]).forEach(f => walk(f.geometry || f, f.properties || {}));
-
-      const wpx = (lon, lat, z) => {
-        const s = 256 * Math.pow(2, z), r = Math.max(-85, Math.min(85, lat)) * Math.PI / 180;
-        return [(lon + 180) / 360 * s, (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * s];
-      };
-      const wll = (x, y, z) => {
-        const s = 256 * Math.pow(2, z), n = Math.PI * (1 - 2 * y / s);
-        return [x / s * 360 - 180, Math.atan(Math.sinh(n)) * 180 / Math.PI];
-      };
-      let z = CONFIG.zoom, ctr = [CONFIG.center[0], CONFIG.center[1]];
-      const pts = [];
-      feats.forEach(f => f.p.forEach(r => r.forEach(q => pts.push(q))));
-      if (pts.length) {
-        const lons = pts.map(q => q[0]), lats = pts.map(q => q[1]);
-        const w = root.clientWidth || 800, h = root.clientHeight || 500;
-        for (z = 16; z > 1; z--) {
-          const a = wpx(Math.min(...lons), Math.max(...lats), z), b = wpx(Math.max(...lons), Math.min(...lats), z);
-          if (b[0] - a[0] < w - 80 && b[1] - a[1] < h - 80) break;
-        }
-        ctr = [(Math.min(...lons) + Math.max(...lons)) / 2, (Math.min(...lats) + Math.max(...lats)) / 2];
-      }
-
-      let queued = false;
-      const draw = () => {
-        queued = false;
-        const w = root.clientWidth, h = root.clientHeight, [cx, cy] = wpx(ctr[0], ctr[1], z);
-        const ox = cx - w / 2, oy = cy - h / 2, n = Math.pow(2, z);
-        const pos = q => { const p = wpx(q[0], q[1], z); return [p[0] - ox, p[1] - oy]; };
-        svg.innerHTML = "";
-        if (OFFLINE_BASEMAP) {
-          const layer = (polys, fill, stroke, sw) => {
-            let d = "";
-            polys.forEach(rings => rings.forEach(r => {
-              let seg = "", any = false;
-              r.forEach((q, i) => { const [x, y] = pos(q); if (x > -w && x < 2 * w && y > -h && y < 2 * h) any = true; seg += (i ? "L" : "M") + x.toFixed(1) + "," + y.toFixed(1); });
-              if (any) d += seg + "Z";
-            }));
-            const p = document.createElementNS(NS, "path");
-            p.setAttribute("d", d); p.setAttribute("fill", fill); p.setAttribute("stroke", stroke);
-            p.setAttribute("stroke-width", sw); p.style.pointerEvents = "none";
-            svg.appendChild(p);
-          };
-          layer(OFFLINE_BASEMAP.w, "#f1efe9", "#9aa5b1", 0.6);
-          layer(OFFLINE_BASEMAP.s, "#f7f6f2", "#b8bfc7", 0.5);
-        }
-        feats.forEach(f => {
-          let el;
-          if (f.k === "pt") {
-            const [x, y] = pos(f.p[0][0]);
-            if (x < -10 || y < -10 || x > w + 10 || y > h + 10) return;
-            el = document.createElementNS(NS, "circle");
-            el.setAttribute("cx", x); el.setAttribute("cy", y); el.setAttribute("r", 6);
-            el.setAttribute("fill", CONFIG.color); el.setAttribute("stroke", "#fff");
-          } else {
-            el = document.createElementNS(NS, "path");
-            el.setAttribute("d", f.p.map(r => "M" + r.map(q => pos(q).join(",")).join("L") + (f.k === "pg" ? "Z" : "")).join(""));
-            el.setAttribute("fill", f.k === "pg" ? CONFIG.color : "none"); el.setAttribute("fill-opacity", "0.3");
-            el.setAttribute("stroke", CONFIG.color); el.setAttribute("stroke-width", "2");
-          }
-          el.style.cursor = "pointer";
-          el.addEventListener("click", e => {
-            e.stopPropagation();
-            pop.innerHTML = "";
-            (CONFIG.popupFields.length ? CONFIG.popupFields : Object.keys(f.props).slice(0, 6)).forEach(k => {
-              const row = document.createElement("div"), b = document.createElement("strong");
-              b.textContent = k + ": "; row.appendChild(b);
-              row.appendChild(document.createTextNode(f.props[k] == null ? "" : String(f.props[k])));
-              pop.appendChild(row);
-            });
-            const r = root.getBoundingClientRect();
-            pop.style.left = Math.min(e.clientX - r.left + 8, w - 250) + "px"; pop.style.top = Math.max(e.clientY - r.top - 10, 4) + "px";
-            pop.style.display = "block";
-          });
-          svg.appendChild(el);
-        });
-      };
-      const redraw = () => { if (!queued) { queued = true; requestAnimationFrame(draw); } };
-      const zoomBy = d => { z = Math.max(1, Math.min(18, z + d)); pop.style.display = "none"; redraw(); };
-      [["+", 1], ["\u2212", -1]].forEach(([l, d]) => {
-        const b = document.createElement("button");
-        b.textContent = l; b.style.cssText = "width:28px;height:28px;font-size:16px;cursor:pointer;border:1px solid #9ca3af;background:#fff;border-radius:4px";
-        b.addEventListener("click", () => zoomBy(d)); ui.appendChild(b);
-      });
-      let drag = null;
-      root.addEventListener("pointerdown", e => { if (e.target.closest("button")) return; drag = { x: e.clientX, y: e.clientY }; root.style.cursor = "grabbing"; });
-      window.addEventListener("pointerup", () => { drag = null; root.style.cursor = "grab"; });
-      window.addEventListener("pointermove", e => {
-        if (!drag) return;
-        const [cx, cy] = wpx(ctr[0], ctr[1], z);
-        ctr = wll(cx - (e.clientX - drag.x), cy - (e.clientY - drag.y), z);
-        drag = { x: e.clientX, y: e.clientY }; redraw();
-      });
-      root.addEventListener("wheel", e => { e.preventDefault(); zoomBy(e.deltaY < 0 ? 1 : -1); }, { passive: false });
-      root.addEventListener("click", () => { pop.style.display = "none"; });
-      if (window.ResizeObserver) new ResizeObserver(redraw).observe(root);
-      draw();
-    }
-    (async function init() {
-      $("title").textContent = CONFIG.title;
-      $("subtitle").textContent = CONFIG.subtitle;
-      $("legendLabel").textContent = CONFIG.legendLabel;
-      $("swatch").style.background = CONFIG.color;
-      $("legend").style.display = "flex";
-      const errs = [];
-      try { await sdkMap(); return; } catch (e) { errs.push("ArcGIS SDK: " + (e.message || e)); console.warn(errs[errs.length - 1], e); }
-      $("map").innerHTML = "";
-      try { await leafletMap(); return; } catch (e) { errs.push("Leaflet: " + (e.message || e)); console.warn(errs[errs.length - 1], e); }
-      if (CONFIG.inlineGeoJSON) { tileMap(CONFIG.inlineGeoJSON); notice("Script libraries blocked by this host; using the built-in lightweight map. " + errs.join(" | ")); }
-      else notice("This host blocked the map libraries and no inlineGeoJSON snapshot is embedded. " + errs.join(" | "));
-    })();
   </script>
 </body>
 </html>
